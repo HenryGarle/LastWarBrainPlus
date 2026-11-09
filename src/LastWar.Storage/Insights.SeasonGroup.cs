@@ -7,7 +7,7 @@ public sealed partial class Insights
     /// decoded from the game table, each server's strength (Overview's measures plus depth counts), every alliance
     /// on those servers ranked by fighting strength (the season-ranking guess), and the strongest players.
     /// </summary>
-    public Dictionary<string, object?> SeasonGroup(long cfg)
+    public Dictionary<string, object?> SeasonGroup(long cfg, int topAlliances = 0)
     {
         new ServerRegistry(path).EnsureSchema();
         using var c = Open();
@@ -41,27 +41,35 @@ public sealed partial class Insights
             """;
         var ps = ("@ids", (object)ids);
 
-        // Depth: how many ACTIVE (7 d) players each server has above hero-power bars, and active HQ 30+.
-        var depth = Q(c, $"""
-            WITH {p}
-            SELECT server,
+        // Server measures. topAlliances > 0 counts only players in each server's N strongest alliances (by fighting
+        // strength of their members from that server); 0 = everyone from the server. heroBoard = the newest in-game
+        // top-200 hero board value of the counted players (exact, where they are on it).
+        res["topAlliances"] = topAlliances;
+        res["servers"] = Q(c, $"""
+            WITH {p},
+            bm AS (SELECT server_id, MAX(taken_at) AS t FROM board_sample WHERE board_type = 13 AND server_id = ANY(@ids) GROUP BY server_id),
+            board AS (SELECT DISTINCT ON (b.uid) b.uid, b.value FROM board_sample b JOIN bm ON bm.server_id = b.server_id AND bm.t = b.taken_at
+                      WHERE b.board_type = 13 ORDER BY b.uid, b.value DESC),
+            al AS (SELECT server, alliance_id, MAX(tag) AS tag, SUM(hero * w) AS f,
+                          ROW_NUMBER() OVER (PARTITION BY server ORDER BY SUM(hero * w) DESC) AS rk
+                   FROM p WHERE alliance_id <> '' GROUP BY server, alliance_id),
+            f AS (SELECT p.* FROM p WHERE @n = 0 OR EXISTS (SELECT 1 FROM al WHERE al.server = p.server AND al.alliance_id = p.alliance_id AND al.rk <= @n)),
+            t AS (SELECT f.*, ROW_NUMBER() OVER (PARTITION BY server ORDER BY hero DESC) AS rn FROM f)
+            SELECT t.server, COUNT(*) AS players, SUM(power) AS power, MAX(hero) AS "topHero",
+                   SUM(hero * w)::bigint AS fight,
+                   COALESCE(SUM(hero) FILTER (WHERE active7), 0) AS "activeHero7",
+                   COALESCE(SUM(bd.value), 0) AS "heroBoard",
+                   COALESCE(SUM(hero) FILTER (WHERE rn <= 100), 0) AS "top100Hero",
+                   COALESCE(SUM(hero) FILTER (WHERE rn <= 20), 0) AS "top20Hero",
                    COUNT(*) FILTER (WHERE active7 AND hero >= 100000000) AS "hero100",
                    COUNT(*) FILTER (WHERE active7 AND hero >= 80000000) AS "hero80",
                    COUNT(*) FILTER (WHERE active7 AND hero >= 60000000) AS "hero60",
                    COUNT(*) FILTER (WHERE active7 AND level >= 30) AS "hq30",
-                   COALESCE(SUM(t.hero) FILTER (WHERE t.rn <= 100), 0) AS "top100Hero",
-                   COALESCE(SUM(t.hero) FILTER (WHERE t.rn <= 20), 0) AS "top20Hero"
-            FROM (SELECT p.*, ROW_NUMBER() OVER (PARTITION BY server ORDER BY hero DESC) AS rn FROM p) t
-            GROUP BY server;
-            """, ps).ToDictionary(r => L(r["server"]));
-        var servers = Overview().Where(r => ids.Contains(L(r["server"]))).ToList();
-        foreach (var r in servers)
-        {
-            if (depth.TryGetValue(L(r["server"]), out var d))
-                foreach (var k in new[] { "hero100", "hero80", "hero60", "hq30", "top100Hero", "top20Hero" }) r[k] = d[k];
-            r.Remove("topAlliances");
-        }
-        res["servers"] = servers;
+                   COUNT(*) FILTER (WHERE active7) AS active,
+                   (SELECT string_agg(al.tag, ', ' ORDER BY al.rk) FROM al WHERE al.server = t.server AND al.rk <= @n) AS counted
+            FROM t LEFT JOIN board bd ON bd.uid = t.uid
+            GROUP BY t.server ORDER BY t.server;
+            """, ps, ("@n", (object)(long)Math.Max(0, topAlliances)));
 
         // Every alliance with members from these servers. core30 = fighting strength of its 30 strongest (rallies
         // and garrisons); fight = the whole alliance. The page's season-ranking guess sorts on fight.

@@ -913,7 +913,7 @@ app.MapGet("/api/x/players", (string? q, string? servers, string? alliance, stri
 // Season groups (servers.season): the season config each server in lo..hi is on.
 app.MapGet("/api/x/season-groups", (int lo, int hi) => insights.SeasonGroups(lo, hi));
 // One season group's dashboard (servers, seeds, strength, alliance ranking guess, top players).
-app.MapGet("/api/x/season-group/{cfg:long}", (long cfg) => insights.SeasonGroup(cfg));
+app.MapGet("/api/x/season-group/{cfg:long}", (long cfg, int? top) => insights.SeasonGroup(cfg, Math.Clamp(top ?? 0, 0, 100)));
 // Admin: a season group seen in game before the game reports it - PUT {servers:[..]} replaces the list, [] removes it.
 app.MapPut("/api/season-groups/hand/{cfg:long}", (long cfg, HandSeasonGroup req) =>
 {

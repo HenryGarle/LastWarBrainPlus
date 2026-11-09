@@ -4,14 +4,15 @@ import { big, int, ago } from "./format.js";
 import { PlayerLink, ServerLink, Tag } from "./bits.jsx";
 import { useHashParam } from "../nav.js";
 
-// #/x/season[/<cfg>][?home=1967]  One season group: its servers side by side, seeds, alliance ranking guess, top players.
-const HOME = 1967;
+// #/x/season[/<cfg>][?focus=<server>&favs=1&top=N]  One season group: its servers side by side, seeds, alliance ranking guess,
+// top players. Anonymous by default: no server is singled out and favourite marks are hidden unless asked for.
+const HOME = 1967;   // only picks which group opens when none is named - never shown
 
 // Server measures, best first. get(r) reads one Overview row (+ depth counts) from /api/x/season-group.
 const MEASURES = [
-  ["fight", "Fighting strength", "hero power weighted by how recently each player was in the game (a day 1, 3 days 0.75, a week 0.35, older 0.1)", (r) => r.totals?.fight],
-  ["activeHero7", "Active hero power", "estimated hero power of players active in the last 7 days", (r) => r.totals?.activeHero7],
-  ["heroBoard", "Hero board top 200", "sum of the in-game top-200 hero power board (exact, not estimated)", (r) => r.totals?.heroBoard],
+  ["fight", "Fighting strength", "hero power weighted by how recently each player was in the game (a day 1, 3 days 0.75, a week 0.35, older 0.1)", (r) => r.fight],
+  ["activeHero7", "Active hero power", "estimated hero power of players active in the last 7 days", (r) => r.activeHero7],
+  ["heroBoard", "Hero board top 200", "in-game top-200 hero board value of the counted players (exact, not estimated)", (r) => r.heroBoard],
   ["top100Hero", "Top 100 hero", "estimated hero power of the server's 100 strongest", (r) => r.top100Hero],
   ["top20Hero", "Top 20 hero", "estimated hero power of the server's 20 strongest (rally leaders)", (r) => r.top20Hero],
   ["topHero", "Strongest player", "estimated hero power of the server's #1", (r) => r.topHero],
@@ -20,7 +21,7 @@ const MEASURES = [
   ["hero60", "Active 60M+", "players active in 7 days with 60M+ estimated hero power", (r) => r.hero60],
   ["hq30", "Active HQ 30+", "players at HQ 30+ active in 7 days", (r) => r.hq30],
   ["active", "Active players", "logged in, donated or chatted in 7 days", (r) => r.active],
-  ["power", "Total power", "every player from the server, newest profile", (r) => r.power],
+  ["power", "Total power", "every counted player, newest profile", (r) => r.power],
 ];
 const isCount = (k) => ["hero100", "hero80", "hero60", "hq30", "active"].includes(k);
 const fmt = (k, v) => (v == null ? "–" : isCount(k) ? int(v) : big(v));
@@ -38,10 +39,13 @@ export function SeasonGroupPage({ route }) {
 }
 
 function SeasonGroup({ cfg }) {
-  const d = useJson(`/api/x/season-group/${cfg}`);
-  const [homeQ, setHome] = useHashParam("home", String(HOME));
+  const [topQ, setTop] = useHashParam("top", "0");
+  const [favsQ, setFavs] = useHashParam("favs", "0");
+  const [homeQ, setHome] = useHashParam("focus", "");
+  const top = Math.max(0, Number(topQ) || 0);
+  const d = useJson(`/api/x/season-group/${cfg}?top=${top}`);
   const [sortKey, setSort] = useState("fight");
-  const home = Number(homeQ) || HOME;
+  const home = Number(homeQ) || 0;   // 0 = no server singled out
   const seeds = useMemo(() => new Set(String(d?.season?.seeds || "").split(",").filter(Boolean).map(Number)), [d]);
   if (!d) return <p className="muted">Loading season group {cfg}…</p>;
   if (d.error) return <p className="err">Could not load ({d.error}).</p>;
@@ -60,9 +64,24 @@ function SeasonGroup({ cfg }) {
   const homeRow = servers.find((r) => r.server === home);
 
   return (
-    <>
+    <div className={favsQ === "1" ? undefined : "hide-favs"}>
       <div className="card">
         <h2>Season {d.season?.season ?? "?"} group {cfg}</h2>
+        <div style={{ display: "flex", gap: 16, flexWrap: "wrap", alignItems: "center", marginBottom: 8 }}>
+          <label>Count players from{" "}
+            <select value={top} onChange={(e) => setTop(e.target.value)}>
+              <option value={0}>everyone on the server</option>
+              {[1, 2, 3, 5, 10, 15, 20, 30].map((n) => <option key={n} value={n}>each server's top {n} alliance{n > 1 ? "s" : ""}</option>)}
+            </select>
+          </label>
+          <label>Focus on{" "}
+            <select value={home || ""} onChange={(e) => setHome(e.target.value)}>
+              <option value="">no server</option>
+              {[...servers].sort((a, b) => a.server - b.server).map((s) => <option key={s.server} value={s.server}>#{s.server}</option>)}
+            </select>
+          </label>
+          <label><input type="checkbox" checked={favsQ === "1"} onChange={(e) => setFavs(e.target.checked ? "1" : "0")} /> Show my favourites</label>
+        </div>
         <p>
           Pre-season {date(d.season?.preStart)} · starts {date(d.season?.start)} · ends {date(d.season?.end)} · {servers.length} servers:{" "}
           {servers.map((r, i) => <span key={r.server}>{i > 0 && ", "}<ServerLink id={r.server} />{seeds.has(r.server) && <span title="seeded server (named in the game's season table)"> ★</span>}</span>)}
@@ -71,6 +90,7 @@ function SeasonGroup({ cfg }) {
           ★ = seeded: the two servers the game's own season table names for this group (decoded from lw_season). On the earlier draw these were the group&apos;s two strongest.
           {byHand > 0 && ` ${byHand} of the servers were entered by hand from the in-game display; the game confirms them when the season starts.`}
           {" "}Strength is estimated hero power from player profiles (the in-game hero board where shown). Active = logged in, donated or chatted in the last 7 days.
+          {top > 0 && `  Server measures count only players in each server's ${top} strongest alliance${top > 1 ? "s" : ""} (by fighting strength of their members from that server).`}
         </p>
       </div>
 
@@ -83,7 +103,7 @@ function SeasonGroup({ cfg }) {
           <table className="small">
             <thead>
               <tr>
-                <th>#</th><th>server</th>
+                <th>#</th><th>server</th>{top > 0 && <th>alliances counted</th>}
                 {MEASURES.map(([k, label, tip]) => (
                   <th key={k} className="num" title={tip} style={{ cursor: "pointer", textDecoration: k === sortKey ? "underline" : undefined }} onClick={() => setSort(k)}>{label}</th>
                 ))}
@@ -94,6 +114,7 @@ function SeasonGroup({ cfg }) {
                 <tr key={r.server} style={r.server === home ? { background: "var(--hl, rgba(57,135,229,0.12))" } : undefined}>
                   <td className="num">{i + 1}</td>
                   <td><ServerLink id={r.server} />{seeds.has(r.server) && " ★"}</td>
+                  {top > 0 && <td className="muted">{r.counted || "–"}</td>}
                   {MEASURES.map(([k, , , get]) => (
                     <td key={k} className="num" style={ranks[r.server]?.[k] === 1 ? { fontWeight: 700 } : undefined}>{fmt(k, get(r))}</td>
                   ))}
@@ -107,7 +128,7 @@ function SeasonGroup({ cfg }) {
       <Bars servers={servers} home={home} seeds={seeds} />
       <Alliances list={d.alliances || []} home={home} />
       <Players list={d.players || []} servers={servers} home={home} />
-    </>
+    </div>
   );
 }
 
@@ -188,7 +209,7 @@ function Bars({ servers, home, seeds }) {
           <div className="mono small" style={{ width: 80, textAlign: "right" }}>{fmt(k, get(r))}</div>
         </div>
       ))}
-      <p className="small muted">{label}: orange = #{home}.</p>
+      {home > 0 && <p className="small muted">{label}: orange = #{home}.</p>}
     </div>
   );
 }

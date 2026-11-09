@@ -559,6 +559,9 @@ a.callout-title:hover .callout-more { opacity: 1; }
 /* Rows about a favourite: its player anywhere in the row, or an alliance / server as the row's subject
    (first cell, or the cell after a leading rank number) - so a favourite server does not shade every player on it. */
 tr:has(.fav-mark.player), tr:has(> td:first-child .fav-mark), tr:has(> td.num:first-child + td .fav-mark), tr:has(> td.subject .fav-mark) { background: rgba(227, 179, 65, 0.09); box-shadow: inset 3px 0 0 #e3b341; }
+/* A page can hide every favourite mark and row shade (Season group: shareable without giving away whose favourites). */
+.hide-favs .fav-mark { display: none; }
+.hide-favs tr:has(.fav-mark) { background: transparent; box-shadow: none; }
 .search-head { padding: 4px 8px; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted, #8b97a6); }
 
 /* Sessions: the stored list gets the room, sign-in the narrow side */
