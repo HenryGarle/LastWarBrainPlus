@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LastWar.Client\LastWar.Client.csproj" />
+    <ProjectReference Include="..\LastWar.Storage\LastWar.Storage.csproj" />
+    <ProjectReference Include="..\LastWar.Lua\LastWar.Lua.csproj" />
+  </ItemGroup>
+</Project>

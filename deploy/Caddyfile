@@ -1,0 +1,17 @@
+# HTTPS for DOMAIN (a certificate from Let's Encrypt, renewed automatically), everything to the app.
+{$DOMAIN} {
+	encode zstd gzip
+	reverse_proxy app:8080
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options nosniff
+		Referrer-Policy same-origin
+		-Server
+	}
+}
+
+# Anything else over plain http (e.g. typing the bare IP) goes to the proper address. https to the
+# bare IP cannot work - there is no certificate for an IP - browsers show "cipher mismatch" there.
+:80 {
+	redir https://{$DOMAIN}{uri}
+}

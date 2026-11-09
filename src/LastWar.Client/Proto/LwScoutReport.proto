@@ -1,0 +1,241 @@
+// Rebuilt from the descriptor in the game client's generated code (apk/src/Protobuf). Do not edit by hand.
+syntax = "proto3";
+package protobuf;
+option csharp_namespace = "LastWar.Client.Proto";
+import "ArmyUnitInfo.proto";
+import "BattleReport.proto";
+import "Mail.proto";
+import "google/protobuf/wrappers.proto";
+
+enum ScoutVisible {
+  DEFAULT = 0;
+  ENABLE = 1;
+  DISABLE = 2;
+  NOT_MATCH = 3;
+  ENABLE_EMPTY = 4;
+}
+message ScoutReport {
+  enum TargetType {
+    DEFAULT = 0;
+    MAIN_BUILDING = 1;
+    STORAGE = 2;
+    COLLECT_BUILDING = 3;
+    TOWER = 4;
+    BUILDING = 5;
+    MARCH = 6;
+    ALLIANCE_CITY = 7;
+    TRAIN = 8;
+    DRAGON_BUILDING = 9;
+    DESERT = 10;
+    ALLIANCE_BUILD = 11;
+    WINTER_STORM_BUILDING = 12;
+    CITY_STRONGHOLD = 13;
+    CITY_TRADE = 14;
+    QUARANTINE_BUILDING = 15;
+    ZWL_BUILDING = 16;
+  }
+  .protobuf.ScoutReport.TargetType targetType = 101;
+  .protobuf.ScoutUser targetUser = 1;
+  .protobuf.ScoutUserWall userWall = 2;
+  .protobuf.ScoutResource resource = 3;
+  .protobuf.ScoutArmy army = 4;
+  .protobuf.ScoutTower tower = 5;
+  .protobuf.ScoutAllianceCity targetAllianceCity = 6;
+  .protobuf.ScoutAllianceCityWall allianceCityWall = 7;
+  .protobuf.ScountDesert targetDesert = 8;
+  .protobuf.ScoutAllianceBuild targetAllianceBuild = 9;
+  .protobuf.ScoutAllianceBuildWall allianceBuildWall = 10;
+  .protobuf.ScoutPlayerSeasonBuild playerSeasonBuild = 11;
+  .protobuf.ScoutWinterStormBuilding winterStormBuild = 12;
+  .protobuf.ScoutCityStronghold scoutCityStronghold = 13;
+  int32 scoutLevel = 14;
+  .protobuf.ScoutBattleWeapon battleWeapon = 15;
+  .protobuf.ArmyProgress armyProcess = 16;
+  int32 version = 17;
+  int32 hideCount = 18;
+  .protobuf.ScoutCityTrade scoutCityTrade = 19;
+  .protobuf.ScoutQuarantineBuilding quarantineBuilding = 20;
+  .protobuf.ScoutZWLBuilding zwlBuilding = 21;
+}
+message ScoutUser {
+  string abbr = 1;
+  string name = 2;
+  string pic = 3;
+  .google.protobuf.Int32Value picVer = 4;
+  .protobuf.PointInfo point = 5;
+  string uid = 6;
+  int32 careerType = 7;
+  int32 careerLv = 8;
+  int32 level = 9;
+  int32 sourceServerId = 10;
+  int64 wolfEndTime = 11;
+}
+message ScoutUserWall {
+  .google.protobuf.Int32Value hp = 1;
+  .google.protobuf.Int32Value hpMax = 2;
+  .google.protobuf.Int32Value visible = 3;
+  string buildingId = 4;
+}
+message ScoutAllianceCity {
+  .google.protobuf.Int32Value city_id = 1;
+  .protobuf.PointInfo point = 2;
+  string abbr = 3;
+  string name = 4;
+  string cityName = 5;
+}
+message ScoutCityStronghold {
+  .google.protobuf.Int32Value strongholdId = 1;
+  .protobuf.PointInfo point = 2;
+  string abbr = 3;
+  string name = 4;
+}
+message ScoutCityTrade {
+  .google.protobuf.Int32Value tradeId = 1;
+  .protobuf.PointInfo point = 2;
+  string abbr = 3;
+  string name = 4;
+}
+message ScoutAllianceCityWall {
+  .google.protobuf.Int32Value hp = 1;
+  .google.protobuf.Int32Value hpMax = 2;
+  .google.protobuf.Int32Value visible = 3;
+}
+message ScountDesert {
+  .google.protobuf.Int32Value des_id = 1;
+  .protobuf.PointInfo point = 2;
+}
+message ScoutResource {
+  repeated .protobuf.Resource data = 1;
+  .google.protobuf.Int32Value visible = 2;
+  .google.protobuf.Int32Value plunderResRate = 3;
+  .google.protobuf.Int32Value resourceItemCount = 4;
+  repeated .protobuf.Reward extraGoods = 5;
+}
+message Resource {
+  .google.protobuf.Int32Value type = 1;
+  .google.protobuf.Int32Value value = 2;
+  .google.protobuf.Int32Value id = 3;
+  .google.protobuf.Int64Value newValue = 4;
+}
+message TypeIdVal {
+  .google.protobuf.Int32Value type = 1;
+  .google.protobuf.StringValue id = 2;
+  .google.protobuf.Int64Value value = 3;
+}
+message ScoutArmy {
+  .protobuf.ScoutTargetArmyUnit target = 1;
+  .protobuf.ScoutHelpArmy help = 2;
+  .protobuf.ScoutTargetArmyTotal targetTotal = 3;
+}
+message ScoutTargetArmyUnit {
+  repeated .protobuf.ScoutFormation formation = 1;
+  .google.protobuf.Int32Value visible = 2;
+  repeated .protobuf.ScoutSoldier allSoldier = 3;
+  int32 soldierPower = 4;
+  repeated .protobuf.ScoutSoldier freeSoldier = 5;
+  repeated .protobuf.ScoutSoldier hospitalSoldier = 6;
+  repeated .protobuf.BattleEffectInfo effects = 7;
+}
+message ScoutTargetArmyTotal {
+  .google.protobuf.Int32Value visible = 1;
+  .google.protobuf.Int64Value total = 2;
+}
+message ScoutHelpArmy {
+  repeated .protobuf.ScoutHelpArmyUnit formation = 1;
+  .google.protobuf.Int32Value visible = 2;
+}
+message ScoutHelpArmyUnit {
+  .protobuf.ScoutFormation formation = 1;
+  .protobuf.User user = 2;
+}
+message ScoutFormation {
+  .google.protobuf.Int32Value soldierTotal = 1;
+  repeated .protobuf.ScoutHero hero = 2;
+  repeated .protobuf.ScoutSoldier soldier = 3;
+  .google.protobuf.Int32Value specialUnitType = 4;
+  int32 index = 5;
+  int32 useChipGroup = 6;
+  int64 power = 7;
+  .protobuf.ScoutSoldierEleven soldierEleven = 8;
+}
+message ScoutHero {
+  .google.protobuf.Int32Value heroId = 1;
+  .google.protobuf.Int32Value heroLevel = 2;
+  .google.protobuf.Int32Value heroQuality = 3;
+  .google.protobuf.Int32Value heroRankLevel = 4;
+  .google.protobuf.Int32Value heroIndex = 5;
+  .google.protobuf.Int32Value maxHp = 6;
+  .google.protobuf.Int32Value curHp = 7;
+  .google.protobuf.Int32Value weaponLevel = 8;
+  repeated .protobuf.HeroEquipInfoProto equipInfos = 9;
+  repeated .protobuf.HeroSkillInfoProto skillInfos = 10;
+  repeated .protobuf.BattleEffectInfo effects = 11;
+  .protobuf.ScoutDominator dominator = 12;
+  repeated .protobuf.WeaponStrengthen weaponStrengthen = 13;
+  .google.protobuf.Int32Value awakenLv = 14;
+  .google.protobuf.Int32Value heroSkinId = 15;
+}
+message ScoutDominator {
+  int32 dominatorId = 1;
+  int32 rankLv = 2;
+}
+message ScoutSoldierEleven {
+  int32 stage = 1;
+  repeated .protobuf.Effect effects = 2;
+}
+message ScoutBattleWeapon {
+  int32 id = 1;
+  int32 level = 2;
+  repeated .protobuf.SkillChipGroupProto chipGroups = 3;
+  repeated .protobuf.BattleEffectInfo effects = 4;
+  int32 skinId = 5;
+}
+message ScoutSoldier {
+  string armsId = 1;
+  .google.protobuf.Int32Value type = 2;
+  .google.protobuf.Int32Value total = 3;
+}
+message ScoutTower {
+  repeated .protobuf.ScoutTowerUnit tower = 1;
+  .google.protobuf.Int32Value visible = 2;
+}
+message ScoutTowerUnit {
+  .google.protobuf.Int32Value level = 1;
+  .google.protobuf.Int32Value attack = 2;
+  .google.protobuf.Int32Value hp = 3;
+  .google.protobuf.Int32Value hpMax = 4;
+}
+message ScoutAllianceBuild {
+  .google.protobuf.Int32Value buildId = 1;
+  .protobuf.PointInfo point = 2;
+  string abbr = 3;
+  string name = 4;
+  .google.protobuf.Int32Value level = 5;
+}
+message ScoutPlayerSeasonBuild {
+  .google.protobuf.Int32Value buildId = 1;
+  .protobuf.PointInfo point = 2;
+  string abbr = 3;
+  string name = 4;
+  .google.protobuf.Int32Value level = 5;
+}
+message ScoutAllianceBuildWall {
+  .google.protobuf.Int32Value hp = 1;
+  .google.protobuf.Int32Value hpMax = 2;
+  .google.protobuf.Int32Value visible = 3;
+}
+message ScoutWinterStormBuilding {
+  .google.protobuf.Int32Value buildId = 1;
+  .protobuf.PointInfo point = 2;
+}
+message ScoutQuarantineBuilding {
+  .google.protobuf.Int32Value buildId = 1;
+  .protobuf.PointInfo point = 2;
+  int32 worldType = 3;
+  int32 battleConfigId = 4;
+}
+message ScoutZWLBuilding {
+  .google.protobuf.Int32Value buildId = 1;
+  .protobuf.PointInfo point = 2;
+  int32 templateId = 4;
+}

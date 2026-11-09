@@ -1,0 +1,237 @@
+// Rebuilt from the descriptor in the game client's generated code (apk/src/Protobuf). Do not edit by hand.
+syntax = "proto3";
+package protobuf;
+option csharp_namespace = "LastWar.Client.Proto";
+import "google/protobuf/wrappers.proto";
+
+enum DialogColor {
+  DEFAULT_COLOR = 0;
+  BLACK = 1;
+  WHITE = 2;
+  RED = 3;
+  GREEN = 4;
+  YELLOW = 5;
+  BLUE = 6;
+}
+message Mail {
+  .protobuf.MailHeader header = 1;
+  .protobuf.MailBody body = 2;
+  .protobuf.MailCustom custom = 3;
+}
+message MailHeader {
+  .protobuf.Message title = 1;
+  .protobuf.Message subTitle = 2;
+}
+message MailBody {
+  .protobuf.Message content = 1;
+  .protobuf.Pay pay = 2;
+  .protobuf.Reward reward = 3;
+  .protobuf.UserInfo userInfo = 4;
+  .protobuf.AllianceInfo allianceInfo = 5;
+  .protobuf.AllianceInviteMove allianceInviteMove = 6;
+  .protobuf.Activation activation = 7;
+  .protobuf.AllianceInvite allianceInvite = 8;
+  int32 mailId = 9;
+  string extra = 10;
+}
+message MailCustom {
+  int32 reply = 1;
+  int32 share = 2;
+  int32 like = 3;
+  string activity = 4;
+  int32 deal = 5;
+  string groupId = 6;
+  int32 seasonId = 7;
+  bool checkSeason = 8;
+}
+message Message {
+  .protobuf.DialogColor color = 1;
+  bool bold = 2;
+  oneof data {
+    string text = 101;
+    .protobuf.Dialog dialog = 102;
+    .protobuf.PointInfo point = 103;
+    .protobuf.User user = 104;
+    .protobuf.Alliance alliance = 105;
+    .protobuf.Monster monster = 106;
+    .protobuf.Percent percent = 107;
+    .protobuf.Scout scout = 108;
+    .protobuf.DateTime dateTime = 109;
+    .protobuf.WorldAllianceCity worldAllianceCity = 110;
+    .protobuf.Url url = 111;
+    .protobuf.TextWithParams textWithParams = 112;
+    .protobuf.IntegerWithSpearated integerWithSpearated = 113;
+    .protobuf.MinePlunderInfo minePlunderInfo = 114;
+    .protobuf.EffectInfo effect = 115;
+    .protobuf.WorldResource worldResource = 116;
+    .protobuf.WorldAllianceBuild worldAllianceBuild = 117;
+    .protobuf.WorldUserBuild worldUserBuild = 118;
+    .protobuf.DragonBuilding dragonBuilding = 119;
+    .protobuf.WorldDesert worldDesert = 120;
+    .protobuf.WinterStormBuilding winterStormBuilding = 121;
+    .protobuf.WorldCityStronghold worldCityStronghold = 122;
+    .protobuf.WorldCityAttachment worldCityAttachment = 123;
+    .protobuf.QuarantineBuilding quarantineBuilding = 124;
+    .protobuf.ZWLBuilding zwlBuilding = 125;
+  }
+}
+message MinePlunderInfo {
+  string userName = 1;
+  .google.protobuf.Int32Value rewardType = 2;
+  string itemId = 3;
+  .google.protobuf.Int32Value plunderRewardNum = 4;
+}
+message Dialog {
+  string id = 1;
+  repeated .protobuf.Message params = 2;
+}
+message Pay {
+  .google.protobuf.Int32Value gold = 1;
+  .google.protobuf.Int32Value choose = 2;
+}
+message Reward {
+  string reward = 1;
+  .google.protobuf.Int32Value rewardLevel = 2;
+  string rewardVersion = 3;
+  .google.protobuf.Int32Value rewardModule = 4;
+  repeated .protobuf.RewardInfo rewardInfo = 5;
+}
+message RewardInfo {
+  .google.protobuf.Int32Value type = 1;
+  .google.protobuf.StringValue id = 2;
+  .google.protobuf.Int64Value num = 3;
+}
+message PointInfo {
+  .google.protobuf.Int32Value server = 1;
+  .google.protobuf.Int32Value x = 2;
+  .google.protobuf.Int32Value y = 3;
+  .google.protobuf.Int32Value worldId = 4;
+}
+message User {
+  string abbr = 1;
+  string name = 2;
+  string uid = 3;
+}
+message Alliance {
+  string abbr = 1;
+  string name = 2;
+}
+message Monster {
+  string id = 1;
+}
+message EffectInfo {
+  string effectStr = 1;
+}
+message Percent {
+  .google.protobuf.Int32Value intValue = 1;
+  .google.protobuf.DoubleValue doubleValue = 2;
+}
+message Scout {
+  enum Target {
+    DEFAULT = 0;
+    BASE = 1;
+    BUILDING = 2;
+    ARMY = 3;
+    ALLIANCE_CITY = 4;
+    DESERT = 5;
+    ALLIANCE_BUILD = 6;
+    WINTER_STORM_BUILDING = 7;
+    CITY_STRONGHOLD = 8;
+    CITY_TRADE = 9;
+    QUARANTINE_BUILDING = 10;
+    ZWL_BUILDING = 11;
+  }
+  .protobuf.Scout.Target target = 1;
+  string targetId = 2;
+  int32 worldType = 3;
+  int32 battleConfigId = 4;
+}
+message DateTime {
+  .google.protobuf.Int64Value milliseconds = 1;
+  .google.protobuf.Int32Value seconds = 2;
+  .google.protobuf.Int64Value utcMilliseconds = 3;
+  .google.protobuf.Int64Value localMilliseconds = 4;
+}
+message WorldAllianceCity {
+  int32 id = 1;
+  string cityName = 2;
+}
+message WorldCityAttachment {
+  int32 id = 1;
+}
+message WorldCityStronghold {
+  int32 id = 1;
+}
+message WorldDesert {
+  int32 id = 1;
+  int32 pointId = 2;
+}
+message WorldResource {
+  int32 id = 1;
+}
+message WorldAllianceBuild {
+  int32 id = 1;
+  int32 level = 2;
+}
+message DragonBuilding {
+  int32 id = 1;
+}
+message WinterStormBuilding {
+  int32 id = 1;
+}
+message QuarantineBuilding {
+  int32 id = 1;
+  int32 battleConfigId = 2;
+}
+message ZWLBuilding {
+  int32 id = 1;
+  int32 templateId = 2;
+}
+message WorldUserBuild {
+  int32 id = 1;
+  int32 level = 2;
+}
+message Url {
+  string href = 1;
+  string text = 2;
+}
+message TextWithParams {
+  string text = 1;
+  repeated .protobuf.Message params = 2;
+}
+message IntegerWithSpearated {
+  .google.protobuf.Int64Value value = 1;
+}
+message UserInfo {
+  string uid = 1;
+  string name = 2;
+  string pic = 3;
+  .google.protobuf.Int32Value picVer = 4;
+  int32 level = 5;
+  int64 wolfEndTime = 6;
+}
+message AllianceInfo {
+  string uid = 1;
+  string name = 2;
+  string abbr = 3;
+  string lang = 4;
+  string icon = 5;
+  .google.protobuf.Int32Value curMember = 6;
+  .google.protobuf.Int32Value maxMember = 7;
+  .google.protobuf.Int64Value fightPower = 8;
+  string leaderName = 9;
+}
+message AllianceInviteMove {
+  string inviteeUid = 1;
+  string inviteeName = 2;
+  string inviterUid = 3;
+  string inviterName = 4;
+  .google.protobuf.Int32Value targetPoint = 5;
+  .google.protobuf.Int32Value serverId = 6;
+}
+message AllianceInvite {
+  .google.protobuf.Int64Value expireTime = 1;
+}
+message Activation {
+  string code = 1;
+}

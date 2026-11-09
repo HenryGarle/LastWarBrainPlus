@@ -1,0 +1,21 @@
+// Rebuilt from the descriptor in the game client's generated code (apk/src/Protobuf). Do not edit by hand.
+syntax = "proto3";
+package protobuf;
+option csharp_namespace = "LastWar.Client.Proto";
+
+message CityGreenInfo {
+  int32 cityId = 1;
+  double greenRate = 2;
+}
+message WorldAllCityGreenInfo {
+  repeated .protobuf.CityGreenInfo infoList = 1;
+}
+message GreenPoints {
+  repeated int32 points = 1;
+  int32 type = 2;
+}
+message IndexGreenPoints {
+  int32 index = 1;
+  repeated int32 points = 2;
+  int64 timeStamp = 3;
+}

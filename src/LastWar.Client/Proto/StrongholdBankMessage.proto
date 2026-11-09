@@ -1,0 +1,10 @@
+// Rebuilt from the descriptor in the game client's generated code (apk/src/Protobuf). Do not edit by hand.
+syntax = "proto3";
+package protobuf;
+option csharp_namespace = "LastWar.Client.Proto";
+
+message BankDeposit {
+  int64 depositAmount = 1;
+  int32 depositDays = 2;
+  string itemId = 3;
+}

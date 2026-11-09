@@ -1,0 +1,814 @@
+// Rebuilt from the descriptor in the game client's generated code (apk/src/Protobuf). Do not edit by hand.
+syntax = "proto3";
+package protobuf;
+option csharp_namespace = "LastWar.Client.Proto";
+import "Mail.proto";
+import "ArmyUnitInfo.proto";
+import "ShieldInfo.proto";
+import "ScoreProgressInfo.proto";
+
+enum SpecialType {
+  NONE = 0;
+  DETECT_EVENT = 1;
+  CROSS_THRONE = 3;
+  CITY_GHOST = 4;
+  S5_CENTER_THRONE = 5;
+  S6_RAINFOREST_THRONE = 6;
+}
+message BuildInfo {
+  string ownerUid = 1;
+  int64 uuid = 2;
+  int32 buildId = 3;
+  int32 level = 4;
+  int32 buildState = 5;
+  int32 queueState = 6;
+  string allianceId = 7;
+  int32 updateEndTime = 8;
+  int32 updateStartTime = 9;
+  int32 lastHpTime = 10;
+  int32 protectEndTime = 11;
+  int32 inside = 12;
+  int32 currentHp = 13;
+  string name = 14;
+  string alAbbr = 15;
+  int32 lastCollectTime = 16;
+  int32 unavailableTime = 17;
+  int32 monthCardEndTime = 18;
+  int32 queueItemId = 19;
+  int32 queueStartTime = 20;
+  int32 queueUpdateTime = 21;
+  int32 destroyStartTime = 22;
+  int32 appearanceId = 23;
+  .protobuf.SpecialType specialType = 24;
+  string positionId = 25;
+  repeated .protobuf.Skin skins = 26;
+  string country = 27;
+  float recoverSpeed = 28;
+  int32 virusLayer = 29;
+  int32 virusEndTime = 30;
+  float fireSpeed = 31;
+  repeated .protobuf.Status status = 32;
+  .protobuf.ThermalConductor thermalConductor = 33;
+  .protobuf.SkillChantInfo SkillChantInfo = 34;
+  .protobuf.MonsterInvasion monsterInvasion = 35;
+  bool refuseTreadVirus = 36;
+  int32 seasonRole = 37;
+  .protobuf.ZoneMobilization zoneMobilization = 38;
+  .protobuf.Sandworm sandworm = 39;
+  .protobuf.MummyChangeInfo mummyChangeInfo = 40;
+  int64 destroyEndTimeMs = 41;
+  .protobuf.MeteoriteInfo meteoriteInfo = 42;
+  .protobuf.CommonMonsterSkillInfo commonMonsterSkillInfo = 43;
+  .protobuf.MonsterChallengeNewDonate challengeNewDonate = 44;
+  bool refusePowerHelper = 45;
+  .protobuf.LightHouseInfo lightHouseInfo = 46;
+  int32 wolfDecrHp = 47;
+  int32 quarantineRole = 48;
+  int32 quarantineArbiter = 49;
+  .protobuf.QuarantineSkillInfo quarantineSkill = 50;
+  int32 quarantineLeave = 51;
+  int32 currentMaxHp = 52;
+  repeated .protobuf.FireWorksInfo fireworks = 53;
+  repeated .protobuf.FireWorksGift fireWorksGiftList = 54;
+  bool showPosition = 55;
+  .protobuf.ShieldInfo shieldInfo = 56;
+}
+message MonsterChallengeNewDonate {
+  int32 configId = 1;
+  int32 count = 2;
+  int64 endTimeStamp = 3;
+}
+message CommonMonsterSkillInfo {
+  repeated .protobuf.CommonMonsterSkillDetailInfo detailInfo = 1;
+}
+message CommonMonsterSkillDetailInfo {
+  int32 aimByPoint = 1;
+  int64 aimEndTime = 2;
+  int64 aimBossUuid = 3;
+  int32 skillId = 4;
+}
+message MummyChangeInfo {
+  int32 id = 1;
+  int32 num = 2;
+}
+message SkillChantInfo {
+  int32 skillId = 1;
+  int64 overTime = 2;
+  int64 startTime = 3;
+}
+message LightHouseInfo {
+  bool lightHouseActive = 1;
+  bool workerActive = 2;
+  int32 brightness = 3;
+  int64 currPower = 4;
+  int64 powerSpeed = 5;
+  int64 powerUpdateTime = 6;
+  int64 maxPower = 7;
+  int32 lightHouseLevel = 8;
+}
+message MonsterInvasion {
+  int32 aimByPoint = 1;
+  int64 aimEndTime = 2;
+}
+message ZoneMobilization {
+  int32 aimByPoint = 1;
+  int64 aimEndTime = 2;
+  int64 aimBossUuid = 3;
+}
+message Skin {
+  int32 skinId = 1;
+  int32 type = 2;
+  int64 skinET = 3;
+  int32 colourId = 4;
+  int64 colourTime = 5;
+}
+message Status {
+  int32 id = 1;
+  int64 beginTime = 2;
+  int64 expireTime = 3;
+  int32 layer = 4;
+}
+message RoadInfo {
+  string ownerUid = 1;
+  int64 uuid = 2;
+  int32 roadState = 3;
+  int32 inside = 4;
+  int32 currentHp = 5;
+  string allianceId = 6;
+}
+message CollectResourceInfo {
+  int32 resourceType = 1;
+  int32 level = 2;
+  int32 type = 3;
+  int32 attachId = 4;
+}
+message ResourceInfo {
+  int32 resourceId = 1;
+  int32 state = 2;
+  int64 gatherUuid = 3;
+  .protobuf.SpecialType specialType = 6;
+  .protobuf.SamplePointInfo samplePointInfo = 7;
+  string gatherUid = 8;
+  int32 gatherServerId = 9;
+  string gatherAllianceId = 10;
+}
+message ExplorePointInfo {
+  string ownerUid = 1;
+  int64 uuid = 2;
+  string eventId = 3;
+  .protobuf.ThermalConductor thermalConductor = 4;
+}
+message SamplePointInfo {
+  string ownerUid = 1;
+  int64 uuid = 2;
+  string eventId = 3;
+}
+message GarbagePointInfo {
+  string ownerUid = 1;
+  int64 uuid = 2;
+  string eventId = 3;
+  int64 endTime = 4;
+}
+message BuildPointInfo {
+  int32 buildPoint = 1;
+  int32 serverId = 2;
+  int32 buildSpeed = 3;
+  int32 campId = 4;
+  string allianceId = 5;
+  string allianceAbbr = 6;
+}
+message DetectRetryTaskInfo {
+  int32 featureConfigId = 1;
+  string extendString = 2;
+}
+message DetectPickOneInfo {
+  int32 configId = 1;
+  string extendString = 2;
+}
+message AllianceCityPointInfo {
+  int32 cityId = 1;
+  int32 openTime = 2;
+  int32 state = 3;
+  int32 protectTime = 4;
+  string alAbbr = 5;
+  string allianceId = 7;
+  int32 durability = 8;
+  int32 lastDurabilityTime = 9;
+  string alName = 10;
+  int32 giveUpTime = 11;
+  string cityName = 12;
+  int32 buildPoint = 13;
+  int32 buildStartTime = 14;
+  int32 serverId = 15;
+  repeated .protobuf.BuildPointInfo buildPointInfo = 16;
+  int32 soldierRemain = 17;
+  .protobuf.ThermalConductor thermalConductor = 18;
+  .protobuf.productInfo productInfo = 19;
+  string icon = 20;
+  .protobuf.StrategicAreaInfo strategicAreaInfo = 21;
+  int32 warTimeIndex = 22;
+  .protobuf.ShieldInfo shieldInfo = 23;
+  int32 ruinTime = 24;
+  int32 lastSetWarTimeIndex = 25;
+}
+message productInfo {
+  int64 startTime = 1;
+  int64 endTime = 2;
+}
+message AllianceCityExtraInfo {
+  oneof extra {
+    int32 default = 100;
+    .protobuf.MissileFactoryInfo missileFactory = 101;
+  }
+}
+message MissileFactoryInfo {
+  .protobuf.productInfo productInfo = 1;
+}
+message StrategicAreaServer {
+  int32 serverId = 1;
+  int32 campId = 2;
+}
+message StrategicAreaInfo {
+  repeated .protobuf.StrategicAreaServer servers = 1;
+}
+message RuinDestroyBuildingPointInfo {
+  int64 expireTime = 1;
+  string uid = 2;
+  string userName = 3;
+  int32 playerServerId = 4;
+  string pic = 5;
+  int32 picVer = 6;
+  int32 headSkinId = 7;
+  int64 headSkinET = 8;
+  string alAbbr = 9;
+  string allianceId = 10;
+  string alName = 11;
+  string alIcon = 12;
+}
+message StrongholdBuildPointInfo {
+  int32 buildPoint = 1;
+  int32 buildSpeed = 3;
+  int32 serverId = 2;
+  string alAbbr = 4;
+  string allianceId = 5;
+  string alName = 6;
+  string alIcon = 7;
+}
+message CityStrongholdPointInfo {
+  int32 strongholdId = 1;
+  int32 state = 3;
+  int32 protectTime = 4;
+  string alAbbr = 5;
+  string allianceId = 7;
+  string alName = 10;
+  int32 giveUpTime = 11;
+  string cityName = 12;
+  int32 buildPoint = 13;
+  int32 buildStartTime = 14;
+  int32 serverId = 15;
+  int32 battleStartTime = 16;
+  int32 battleEndTime = 17;
+  .protobuf.StrongholdBuildPointInfo buildPointInfo = 18;
+  .protobuf.ThermalConductor thermalConductor = 19;
+  string icon = 20;
+  .protobuf.BankRobInfo bankRobInfo = 21;
+  int32 warTimeIndex = 22;
+  .protobuf.FishPondInfo fishPondInfo = 23;
+  repeated .protobuf.ScoreProgressInfo scoreProgressList = 24;
+  int32 lastSetWarTimeIndex = 25;
+}
+message BankRobInfo {
+  int64 totalAmount = 1;
+  int64 robAmount = 2;
+  int64 robEndTime = 3;
+  int32 robStage = 4;
+}
+message FishPlayerInfo {
+  string uid = 1;
+  string pic = 2;
+  int32 picVer = 3;
+}
+message FishPondInfo {
+  repeated .protobuf.FishPlayerInfo fishPlayerList = 1;
+}
+message CityAltarOccupyInfo {
+  .protobuf.CityAltarUserInfo userInfo = 1;
+  int64 score = 2;
+  int64 st = 3;
+  int64 et = 4;
+  int64 speed = 5;
+}
+message CityAltarUserInfo {
+  string uid = 1;
+  string uidName = 2;
+  string pic = 3;
+  int32 picVer = 4;
+  int32 headSkinId = 5;
+  int64 headSkinET = 6;
+  string alAbbr = 7;
+  string allianceId = 8;
+  string alName = 9;
+  string alIcon = 10;
+  int32 sid = 11;
+}
+message CityAltarPointInfo {
+  int64 uuid = 1;
+  int32 cfgid = 2;
+  .protobuf.CityAltarUserInfo owner = 3;
+  .protobuf.CityAltarUserInfo tmpOwner = 4;
+  repeated .protobuf.CityAltarOccupyInfo occupylist = 5;
+  int64 giveupTime = 6;
+  int64 battleStartTime = 7;
+  int64 battleEndTime = 8;
+  int32 fishState = 9;
+  .protobuf.CityAltarUserInfo firstOwner = 10;
+  int64 firstOccupyTime = 11;
+}
+message CityTradeBuildPointInfo {
+  int32 buildPoint = 1;
+  int32 buildSpeed = 2;
+  int32 serverId = 3;
+  int64 refreshTime = 4;
+  string uid = 5;
+  string uidName = 6;
+  string pic = 7;
+  int32 picVer = 8;
+  int32 headSkinId = 9;
+  int64 headSkinET = 10;
+  string alAbbr = 11;
+  string allianceId = 12;
+  string alName = 13;
+  string alIcon = 14;
+}
+message CityTradePointInfo {
+  int32 tradeId = 1;
+  int32 state = 2;
+  string uid = 3;
+  string userName = 4;
+  string pic = 5;
+  int32 picVer = 6;
+  int32 headSkinId = 7;
+  int64 headSkinET = 8;
+  string alAbbr = 9;
+  string allianceId = 10;
+  string alName = 11;
+  int32 serverId = 12;
+  int64 battleStartTime = 13;
+  int64 battleEndTime = 14;
+  repeated .protobuf.CityTradeBuildPointInfo buildPointInfo = 15;
+  string tempAlAbbr = 16;
+  string tempAllianceId = 17;
+  string tempAlName = 18;
+  int64 openTime = 19;
+  int32 shopRefreshNum = 20;
+  int32 shopState = 21;
+  string icon = 22;
+  int32 nightShopRefreshNum = 23;
+  int32 nightShopState = 24;
+  int64 giveUpTime = 25;
+}
+message GoldTreePointInfo {
+  int32 treeId = 1;
+  int64 power = 2;
+  int64 startTime = 3;
+  int64 endTime = 4;
+  int64 finishTime = 5;
+  int32 chargePlayerNum = 6;
+}
+message CityMiniGamePointInfo {
+  int32 cityId = 1;
+  int32 gameCityState = 2;
+  string uid = 3;
+  string userName = 4;
+  string pic = 5;
+  int32 picVer = 6;
+  int32 headSkinId = 7;
+  int64 headSkinET = 8;
+  int32 serverId = 9;
+  int64 startTime = 10;
+  int64 endTime = 11;
+  int64 openTime = 12;
+  int32 rankTotalNum = 13;
+  .protobuf.CityMiniGameUserScoreInfo firstUserScoreInfo = 14;
+}
+message CityMiniGameUserScoreInfo {
+  string uid = 1;
+  string userName = 2;
+  string pic = 3;
+  int32 picVer = 4;
+  int32 headSkinId = 5;
+  int64 headSkinET = 6;
+  int32 serverId = 7;
+  int64 passTime = 8;
+  int64 score = 9;
+  int64 score2 = 10;
+}
+message CollectRewardInfo {
+  string ownerUid = 1;
+  int64 uuid = 2;
+  int64 expireTime = 3;
+  int32 contentId = 4;
+}
+message AllianceBuildingPointInfo {
+  int64 uuid = 1;
+  int32 buildId = 2;
+  int32 level = 3;
+  int32 state = 4;
+  string alAbbr = 5;
+  string allianceId = 6;
+  int32 durability = 7;
+  int64 lastDurabilityTime = 8;
+  float durabilitySpeed = 9;
+  int64 fireEndTime = 10;
+  .protobuf.ZombieRushInfo zombieRushInfo = 11;
+  .protobuf.AllianceFurnaceInfo allianceFurnaceInfo = 12;
+  int32 fightState = 13;
+  int32 positionId = 14;
+  .protobuf.ShieldSkillInfo shieldSkillInfo = 15;
+  int64 protectTime = 16;
+}
+message ShieldSkillInfo {
+  int32 skillId = 1;
+  int64 overTime = 2;
+  int64 startTime = 3;
+  int64 maxShield = 4;
+  int64 curShield = 5;
+}
+message AllianceFurnaceInfo {
+  int32 state = 1;
+}
+message ZombieRushInfo {
+  int32 zombieRush = 1;
+  int32 round = 2;
+  int32 state = 3;
+  int64 stateEndTime = 4;
+}
+message WorldPointInfo {
+  int32 id = 1;
+  int32 pointType = 2;
+  .protobuf.BuildInfo buildInfo = 3;
+  .protobuf.RoadInfo roadInfo = 4;
+  .protobuf.CollectResourceInfo collectResourceInfo = 5;
+  .protobuf.ResourceInfo resourceInfo = 6;
+  .protobuf.ExplorePointInfo explorePointInfo = 7;
+  .protobuf.SamplePointInfo samplePointInfo = 8;
+  .protobuf.GarbagePointInfo garbagePointInfo = 9;
+  .protobuf.HeroDispatchMissionPointInfo heroDispatchMissionPointInfo = 10;
+  .protobuf.TreasurePointInfo treasurePointInfo = 11;
+  .protobuf.WorldAllianceCollectResPointInfo allianceCollectResInfo = 12;
+  .protobuf.IceSuppliesPointInfo iceSuppliesPointInfo = 13;
+  .protobuf.GhostReconPointInfo ghostReconPointInfo = 14;
+  .protobuf.CityAttachment cityAttachment = 15;
+  .protobuf.ZoneMobilizationPointInfo zoneMobilizationPointInfo = 16;
+  .protobuf.SurprisePointInfo surprisePoint = 17;
+  .protobuf.MeteoritePoint meteoritePoint = 18;
+  .protobuf.MonsterChallengeTreasurePointInfo monsterChallengeTreasurePointInfo = 19;
+  .protobuf.ActivityTreasurePointInfo activityTreasurePoint = 20;
+  .protobuf.QuarantinePointInfo quarantinePoint = 21;
+  repeated .protobuf.Status status = 22;
+  .protobuf.CityCompetitionPoint cityCompetitionPoint = 23;
+  .protobuf.ZWLBuildingPoint zwlBuilding = 24;
+  .protobuf.AllianceBossS0BuildPointInfo allianceBossS0BuildPointInfo = 25;
+  int64 uuid = 100;
+  bytes extraInfo = 101;
+  int32 serverId = 102;
+  int32 srcServerId = 103;
+  int32 worldId = 104;
+}
+message ZWLBuildingPoint {
+  int32 cityId = 1;
+  int32 type = 2;
+  int32 state = 3;
+  int32 ownerCampId = 4;
+  int32 tmpOwnerCampId = 5;
+  int64 fixStartTime = 6;
+  int64 fixEndTime = 7;
+  int32 progress = 8;
+  int32 progressMax = 9;
+  int64 occupyStartTime = 10;
+  int32 occupyStartProgress = 11;
+  int64 fireTime = 12;
+  .protobuf.refreshBuffInfo buffInfo = 13;
+  int64 overTime = 14;
+  map<int32, float> effect = 15;
+  string alAbbr = 16;
+  int32 alServerId = 17;
+  int64 unlockTime = 18;
+  int64 battleStartTime = 19;
+  int64 battleEndTime = 20;
+}
+message refreshBuffInfo {
+  int64 refreshTime = 1;
+  int32 buffId = 2;
+}
+message CityAttachment {
+  int32 buildId = 1;
+  int32 state = 2;
+  int64 curExp = 3;
+  string alAbbr = 4;
+  string allianceId = 5;
+  int32 rewardNum = 6;
+  string alName = 7;
+  int32 serverId = 8;
+  bool isFirst = 9;
+}
+message LandPointInfo {
+  int32 id = 1;
+  int32 landId = 2;
+  int32 serverId = 3;
+}
+message DesertInfo {
+  int32 id = 1;
+  int64 uuid = 2;
+  int32 desertId = 3;
+  int64 protectEndTime = 4;
+  string uid = 5;
+  string allianceId = 6;
+  int32 serverId = 7;
+  bool hasAssistance = 8;
+  int32 mineId = 9;
+  int32 ownerServer = 10;
+  int32 oriDesertId = 11;
+  .protobuf.UserInfo userInfo = 12;
+  int64 fireEndTime = 13;
+  int64 giveUpTime = 14;
+}
+message DragonBuildingPointInfo {
+  int64 uuid = 1;
+  int32 buildId = 2;
+  int32 state = 3;
+  string alAbbr = 4;
+  string allianceId = 5;
+  int64 occupyTime = 6;
+  int64 openTime = 7;
+  int64 startTime = 8;
+  int64 protectTime = 9;
+  int32 rewardCount = 10;
+  int32 overflowScore = 11;
+  int32 score = 12;
+}
+message DragonSecretKeyPointInfo {
+  int64 uuid = 1;
+  int64 createTime = 2;
+  int32 index = 3;
+}
+message HeroDispatchMissionPointInfo {
+  string ownerUid = 1;
+  int32 cfgId = 2;
+  int64 completionTime = 3;
+  repeated string stealList = 4;
+  repeated string accList = 5;
+  repeated int64 heroList = 6;
+  int32 rewarded = 7;
+  int64 actEndTime = 8;
+  string allianceId = 9;
+  int32 size = 10;
+  string conditionList = 11;
+}
+message GhostReconPointInfo {
+  string ownerUid = 1;
+  int32 cfgId = 2;
+  int64 completionTime = 3;
+  repeated string stealList = 4;
+  repeated .protobuf.GhostReconMemberData memberList = 5;
+  int32 ownerServer = 6;
+  int64 taskExpireTime = 7;
+  string allianceId = 8;
+  int32 size = 9;
+  int64 actEndTime = 10;
+  int64 teamStartTime = 11;
+}
+message ZoneMobilizationPointInfo {
+  int32 bossId = 1;
+  int32 stage = 2;
+  bool donateMax = 3;
+}
+message AllianceBossS0BuildPointInfo {
+  string allianceId = 1;
+  int32 cfgId = 2;
+  string abbr = 3;
+  int64 startTime = 4;
+  int64 lastReserveTime = 5;
+  int64 actEndTime = 6;
+}
+message MonsterChallengeTreasurePointInfo {
+  string allianceId = 1;
+  int64 startTime = 2;
+  string allianceName = 3;
+  string allianceAbbr = 4;
+  int64 allianceDamage = 5;
+  int32 configId = 6;
+  int64 endTime = 7;
+}
+message CityCompetitionPoint {
+  int32 cityId = 1;
+}
+message GhostReconMemberData {
+  string memberUid = 1;
+  int32 rewarded = 2;
+  int32 canReward = 3;
+}
+message DragonScoreInfo {
+  int64 uuid = 1;
+  int32 score = 2;
+  int32 itemId = 3;
+}
+message TreasurePointInfo {
+  int64 uuid = 1;
+  string ownerUid = 2;
+  string eventId = 3;
+  int64 completionTime = 4;
+  string allianceId = 5;
+  string allianceAbbr = 6;
+  repeated string rewardUserList = 7;
+  repeated .protobuf.UserInfo diggingUserList = 8;
+  int64 startTime = 9;
+  bool complete = 10;
+  float speed = 11;
+  string ownerName = 12;
+  int64 expireTime = 13;
+  int32 type = 14;
+  int64 createTime = 15;
+  .protobuf.ThermalConductor thermalConductor = 16;
+  int32 fromPoint = 17;
+  int32 multiple = 18;
+  string killerId = 19;
+  string customInfo = 20;
+}
+message WorldAllianceCollectResPointInfo {
+  int64 uuid = 1;
+  int32 buildId = 2;
+  string allianceId = 3;
+  string allianceAbbr = 4;
+  int32 state = 5;
+}
+message IceSuppliesPointInfo {
+  int64 uuid = 1;
+  int32 configId = 2;
+  int32 state = 3;
+  repeated string rewardUserList = 4;
+  .protobuf.ThermalConductor thermalConductor = 5;
+  int64 createTime = 6;
+  string discovererAllianceId = 7;
+  string discovererUid = 8;
+  int64 chargeEndTime = 9;
+  int32 chargeState = 10;
+}
+message SurprisePointInfo {
+  int64 uuid = 1;
+  int32 configId = 2;
+  int64 showTime = 3;
+  int64 openTime = 4;
+}
+message WinterEntityPointInfo {
+  int64 uuid = 1;
+  int32 buildId = 2;
+  int32 closeTime = 3;
+  int32 openTime = 4;
+  int32 occupyingStartTime = 5;
+  int32 side = 6;
+  int32 eventStartTime = 7;
+  int32 eventFinishTime = 8;
+  int32 findAimTime = 9;
+  int32 aimDeadTime = 10;
+  repeated int64 targetEnemyUUID = 11;
+  int32 state = 12;
+  int32 pointId = 13;
+  string ownerUid = 14;
+  int32 lastOccupyTime = 15;
+  int32 hp = 16;
+  int32 score = 17;
+}
+message ThermalConductor {
+  string uuid = 1;
+  string ownerId = 2;
+  int32 point = 3;
+  int32 type = 4;
+  int64 startTime = 5;
+  float cur = 6;
+  float target = 7;
+  int64 endTime = 8;
+  int32 phase = 9;
+  int32 nextPhase = 10;
+  int64 nextPhaseEndTime = 11;
+  int64 changePhaseDuration = 12;
+  float speed = 13;
+  int32 hp = 14;
+  int32 maxHp = 15;
+  int32 phaseReason = 16;
+  int32 nextPhaseReason = 17;
+}
+message Sandworm {
+  int32 type = 1;
+  int32 state = 2;
+  int64 curHp = 3;
+  int64 maxHp = 4;
+  int32 monsterId = 5;
+  int64 stateEndTime = 6;
+}
+message FireWorksInfo {
+  string sendUid = 1;
+  string pic = 2;
+  int32 picVer = 3;
+  string countryFlag = 4;
+  int32 headSkinId = 5;
+  int64 headSkinET = 6;
+  int64 startTime = 7;
+  int64 endTime = 8;
+  int32 configId = 9;
+}
+message FireWorksGift {
+  int64 uuid = 1;
+  int32 configId = 2;
+  int32 index = 10;
+  int32 num = 3;
+  int32 max = 4;
+  int64 sendTime = 5;
+  string sendUid = 6;
+}
+message FireWorksInfoList {
+  repeated .protobuf.FireWorksInfo list = 1;
+}
+message MeteoritePoint {
+  int32 buildId = 1;
+  int32 openTime = 2;
+  int32 collectEndTime = 3;
+  int32 expireTime = 4;
+  int32 remainTime = 5;
+  int64 gatherUUID = 6;
+  string gatherUid = 7;
+  string gatherAllianceId = 8;
+  int32 fromPoint = 9;
+  string targetPic = 10;
+  int32 targetPicVer = 11;
+  int32 targetHeadId = 12;
+  int64 targetHeadET = 13;
+}
+message ActivityTreasurePointInfo {
+  int32 cfgId = 1;
+  int64 uuid = 2;
+  string ownerId = 3;
+  int32 aid = 4;
+}
+message QuarantinePointInfo {
+  int64 uuid = 1;
+  int32 buildId = 2;
+  int32 openTime = 3;
+  int32 role = 4;
+  int32 findAimTime = 5;
+  int32 hitAimTime = 6;
+  int32 state = 7;
+  int32 pointId = 8;
+  int32 score = 9;
+  int32 overflowScore = 10;
+  int32 occupyTime = 11;
+  int32 buffId = 12;
+  int32 buffEndTime = 13;
+  int64 marchUUID = 14;
+  string marchUid = 15;
+  repeated int64 targetUUID = 16;
+}
+message QuarantineSkillInfo {
+  int32 skilId = 1;
+  int64 activeStartTime = 2;
+  int64 activeEndTime = 3;
+  int32 tagetPointId = 4;
+}
+message OutpostInfo {
+  int64 uuid = 1;
+  int32 cityId = 2;
+  int32 pointId = 3;
+  int32 worldId = 4;
+  int32 state = 5;
+  string ownerAllianceId = 6;
+  int32 ownerServerId = 7;
+  int32 tmpOwnerServerId = 8;
+  int64 protectTime = 9;
+  int64 battleStartTime = 10;
+  int64 firstOccupyTime = 11;
+  string firstOccupyAllianceId = 12;
+  string firstOccupyAllianceName = 13;
+  string firstOccupyAllianceAbbr = 14;
+  int32 firstOccupyServerId = 15;
+  int64 lastRepairTime = 16;
+  int32 repairScore = 17;
+  int32 connectSwitch = 18;
+  string destroyAllianceId = 19;
+  int32 destroyServerId = 20;
+  int64 ruinTime = 21;
+}
+message OutpostTowerInfo {
+  int64 uuid = 1;
+  int32 cityId = 2;
+  int32 pointId = 3;
+  int32 worldId = 4;
+  int32 state = 5;
+  int32 tmpOwnerServerId = 6;
+  int64 protectTime = 7;
+  int64 battleStartTime = 8;
+  int64 lastTowerAttackTime = 9;
+}
+message MoveBuildingCheckInfo {
+  bool isBlackPoint = 1;
+  bool isMeteoriteFreeMove = 2;
+}

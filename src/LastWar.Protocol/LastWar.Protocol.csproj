@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.33.0" />
+    <PackageReference Include="ZstdSharp.Port" Version="0.8.6" />
+    <PackageReference Include="Grpc.Tools" Version="2.72.0" PrivateAssets="All" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Schemas recovered verbatim from the APK (Net/Proto/*.luac embed the .proto source). -->
+    <Protobuf Include="Proto\**\*.proto" GrpcServices="None" ProtoRoot="Proto" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LastWar.Core\LastWar.Core.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,349 @@
+// Rebuilt from the descriptor in the game client's generated code (apk/src/Protobuf). Do not edit by hand.
+syntax = "proto3";
+package protobuf;
+option csharp_namespace = "LastWar.Client.Proto";
+
+message SoldierProto {
+  string armsId = 1;
+  int32 type = 2;
+  int32 total = 3;
+  int32 lost = 4;
+  int32 wounded = 5;
+  int32 injured = 6;
+  int32 dead = 7;
+  int32 cure = 8;
+  int32 degrade = 9;
+  int32 reduceDead = 10;
+  int32 reduceDeadLogic = 11;
+}
+message HeroSkillInfoProto {
+  int32 skillId = 1;
+  int32 skillLv = 2;
+  int32 slot = 3;
+}
+message HeroEquipInfoProto {
+  int32 equipId = 1;
+  int32 equipLv = 2;
+  int32 promote = 3;
+}
+message HeroEffectProto {
+  int32 effectId = 1;
+  float value = 2;
+}
+message HeroInfoProto {
+  int32 heroId = 1;
+  int32 heroLevel = 2;
+  int32 heroQuality = 3;
+  int32 index = 4;
+  repeated .protobuf.HeroSkillInfoProto skillInfos = 5;
+  int64 heroUuid = 6;
+  int32 maxLevel = 7;
+  int32 rankLv = 8;
+  int32 stage = 9;
+  int32 heroIndex = 10;
+  repeated .protobuf.HeroEffectProto effectInfos = 11;
+  int32 maxHealth = 12;
+  int32 curHealth = 13;
+  repeated .protobuf.HeroEquipInfoProto equipInfos = 14;
+  int32 weaponLevel = 15;
+  .protobuf.DominatorProto dominator = 16;
+  repeated .protobuf.WeaponStrengthen weaponStrengthen = 17;
+  int32 awakenLv = 18;
+  int32 heroSkinId = 19;
+}
+message WeaponStrengthen {
+  int32 slot = 1;
+  int32 lv = 2;
+}
+message DominatorProto {
+  int32 dominatorId = 1;
+  int32 rankLv = 2;
+  repeated .protobuf.HeroSkillInfoProto skillInfos = 3;
+  int64 dominatorUuid = 4;
+  repeated .protobuf.HeroEffectProto effectInfos = 5;
+  string name = 6;
+  int32 level = 7;
+}
+message DominatorProgress {
+  repeated .protobuf.DominatorTrain dominatorTrainInfos = 1;
+  int32 power = 2;
+}
+message DominatorTrain {
+  int32 trainId = 1;
+  int32 level = 2;
+}
+message BattleCardModule {
+  repeated .protobuf.BattleCardProto cards = 1;
+  int64 power = 2;
+  repeated .protobuf.Effect effects = 3;
+  repeated .protobuf.Effect skillEffects = 4;
+  repeated .protobuf.CardSkillCheckResult checkResults = 5;
+}
+message BattleCardProto {
+  int32 cardId = 1;
+  int32 level = 2;
+  int32 star = 3;
+  int32 slot = 4;
+  repeated .protobuf.Effect randomEffects = 5;
+}
+message CardSkillCheckResult {
+  int32 skillId = 1;
+  int32 point = 2;
+}
+message SoldierElevenProto {
+  int32 progressId = 1;
+  int32 stage = 2;
+  repeated .protobuf.Effect effects = 3;
+  repeated .protobuf.Effect specialEffects = 4;
+}
+message WeaponProto {
+  int32 id = 1;
+  int32 lv = 2;
+  repeated .protobuf.HeroSkillInfoProto skillInfos = 3;
+  repeated .protobuf.HeroEffectProto effectInfos = 4;
+  int32 skinId = 5;
+  repeated .protobuf.SkillChipProto chips = 6;
+  int32 totalChipLv = 7;
+  int32 uavExp = 8;
+}
+message HeroModuleProto {
+  int32 weaponStrengTotalLv = 1;
+}
+message ArmyUnitInfo {
+  repeated .protobuf.SoldierProto soldiers = 1;
+  repeated .protobuf.HeroInfoProto heroes = 2;
+  string name = 3;
+  string alAbbr = 4;
+  string pic = 5;
+  int32 picVer = 6;
+  int32 headFrame = 7;
+  int32 careerType = 8;
+  int32 careerLv = 9;
+  repeated .protobuf.ArmyUnitBuff unitBuffs = 10;
+  int32 headSkinId = 11;
+  .protobuf.WeaponProto weapon = 12;
+  int32 weaponSkinId = 13;
+  bool hasSoldier = 14;
+  .protobuf.HeroModuleProto heroModule = 15;
+}
+message BatchArmyUnit {
+  repeated .protobuf.ArmyDBUnitInfo armyUnits = 1;
+}
+message Effect {
+  int32 id = 1;
+  float val = 2;
+}
+message ArmyUnitEffectInfoProto {
+  repeated float playerEffect = 1;
+  repeated float formationEffect = 2;
+  repeated .protobuf.UnitEffectReason unitEffectReasons = 3;
+  repeated .protobuf.ArmyUnitBuff unitBuffs = 4;
+  map<int32, .protobuf.Effect> unitEffect = 5;
+  map<int32, .protobuf.Effect> formationEffectMap = 6;
+  int32 version = 7;
+  map<int32, .protobuf.ExtraEffectSource> extraEffectMap = 8;
+  repeated .protobuf.ArmyUnitBuff tempUnitBuffs = 9;
+  map<int32, .protobuf.Effect> tempEffects = 10;
+  map<int32, .protobuf.Effect> soldierSpecialEffects = 11;
+  .protobuf.ArmyUnitOtherEffectInfo otherEffectInfo = 12;
+  repeated .protobuf.UnitEffectReason formationEffectReasons = 13;
+}
+message ArmyUnitOtherEffectInfo {
+  bool isAdd = 1;
+  map<int32, .protobuf.OtherEffectTab> otherEffectMap = 2;
+}
+message OtherEffectTab {
+  int32 tabId = 1;
+  repeated .protobuf.Effect effects = 2;
+}
+message ExtraEffectSource {
+  int32 sourceType = 1;
+  repeated .protobuf.Effect effects = 2;
+}
+message UnitEffectReason {
+  int32 effectId = 1;
+  repeated .protobuf.EffectReason reasons = 2;
+}
+message ArmyUnitBuff {
+  int32 buffId = 1;
+  repeated int32 effectId = 2;
+  repeated float value = 3;
+  int32 expireTime = 4;
+}
+message EffectReason {
+  int32 reason = 1;
+  float value = 2;
+}
+message ScienceProgress {
+  int32 scienceTabId = 1;
+  int32 progress = 2;
+}
+message DecorationProgress {
+  int32 decoQualityId = 1;
+  int32 totalCount = 2;
+  int32 totalLv = 3;
+}
+message HonorWallProgress {
+  int32 count = 1;
+  int32 totalLevel = 2;
+}
+message ArmyProgress {
+  int32 formationEquipPower = 1;
+  int32 sciencePower = 2;
+  int32 decoPower = 3;
+  repeated int32 equipId = 4;
+  repeated .protobuf.ScienceProgress science = 5;
+  repeated .protobuf.DecorationProgress deco = 6;
+  repeated int32 totalHonorLevel = 7;
+  int32 honorPower = 8;
+  repeated .protobuf.HonorWallProgress honorWall = 9;
+  repeated .protobuf.Effect scienceEffects = 10;
+  repeated .protobuf.Effect decoEffects = 11;
+  .protobuf.DominatorProgress dominator = 12;
+  repeated .protobuf.Effect extraEffects = 13;
+  repeated int32 exp = 14;
+  .protobuf.SkinProgress skinProgress = 15;
+  repeated .protobuf.OtherEffectInfo otherEffects = 16;
+}
+message OtherEffectInfo {
+  int32 tabType = 1;
+  repeated .protobuf.Effect effects = 2;
+}
+message SkinProgress {
+  int32 power = 1;
+  repeated .protobuf.Effect skinEffects = 2;
+  repeated .protobuf.SkinProgressSingle skinProgressSingle = 3;
+}
+message SkinProgressSingle {
+  int32 type = 1;
+  int32 skinId = 2;
+  int32 num = 3;
+}
+message ArmyDBUnitInfo {
+  string uid = 1;
+  repeated .protobuf.SoldierProto soldiers = 2;
+  repeated .protobuf.HeroInfoProto heroes = 3;
+  .protobuf.ArmyUnitEffectInfoProto effectInfo = 4;
+  int32 formationIndex = 5;
+  int32 ArmyDataType = 10;
+  int32 ArmyId = 11;
+  int32 ArmyHolderId = 12;
+  string EffectString = 13;
+  int32 SpecialUnitType = 14;
+  int64 formationUuid = 15;
+  .protobuf.ArmyProgress progress = 16;
+  .protobuf.WeaponProto weapon = 17;
+  .protobuf.MeteoriteInfo meteoriteInfo = 18;
+  string costMummyRecord = 19;
+  .protobuf.HeroModuleProto heroModule = 20;
+  .protobuf.ArmyStatistics statistics = 21;
+  .protobuf.BattleCardModule battleCard = 22;
+  .protobuf.SoldierElevenProto soldierEleven = 23;
+  .protobuf.ParallelExtInfo parallelExtInfo = 24;
+  repeated .protobuf.Effect seasonCallBackEffects = 25;
+  .protobuf.CrystalTalent crystalTalent = 26;
+}
+message ParallelExtInfo {
+  double totalPay = 1;
+  int32 vipLevel = 2;
+  bool battleServer = 3;
+}
+message ArmyStatistics {
+  map<int32, int32> datas = 1;
+}
+message MonsterArmyInfo {
+  int32 monsterId = 1;
+  .protobuf.BatchArmyUnit armyUnits = 2;
+  int64 expireTime = 3;
+  oneof extra {
+    .protobuf.MummyPatrol mummyPatrol = 101;
+    .protobuf.MuseMummy museMummy = 102;
+    .protobuf.DarknessMonster DarknessMonster = 103;
+    .protobuf.CrocodileMonster CrocodileMonster = 104;
+  }
+}
+message DefendArmyInfo {
+  repeated .protobuf.ArmyDBUnitInfo defends = 1;
+}
+message SkillChipProto {
+  int32 cfgId = 1;
+  int32 lv = 2;
+  int32 star = 3;
+}
+message SkillChipGroupProto {
+  int32 group = 1;
+  repeated .protobuf.SkillChipProto skillChipInfos = 2;
+}
+message MummyPatrol {
+  int32 firstTargetPoint = 1;
+  int32 changeTimes = 2;
+  map<string, int32> attackTimes = 3;
+  string skillId = 4;
+}
+message MuseMummy {
+  int32 searchTimes = 1;
+  int32 skillTargetPointId = 2;
+  int32 skillId = 3;
+}
+message FloatInfo {
+  enum State {
+    NORMAL = 0;
+    STUNNED = 1;
+  }
+  int32 state = 1;
+  int64 stateChangeTime = 2;
+  int64 currentArmor = 3;
+  int64 maxArmor = 4;
+  int32 armorChestDropped = 5;
+  int32 bloodChestDropped = 6;
+}
+message DarknessMonster {
+  int32 bornPointId = 1;
+  bool isBloodNight = 2;
+  int64 lastAttackTime = 3;
+  .protobuf.WhistleInfo whistleInfo = 4;
+  int64 curHp = 5;
+  int64 maxHp = 6;
+  .protobuf.WanderBoss wanderBoss = 7;
+  .protobuf.FloatInfo floatInfo = 8;
+}
+message WanderBoss {
+  int32 rallyNum = 1;
+}
+message WhistleInfo {
+  enum State {
+    NORMAL = 0;
+    WHISTLED = 1;
+    FOLLOWING = 2;
+    ATTACKING = 3;
+  }
+  int64 attractMarchUuid = 1;
+  string followingUser = 2;
+  int32 state = 3;
+  int64 stateChangeTime = 4;
+  int32 attractMarchTargetPos = 5;
+  int32 attractIndex = 6;
+}
+message MeteoriteInfo {
+  int32 crystal = 1;
+  int32 nucleus = 2;
+}
+message CrocodileMonster {
+  int32 bornPointId = 1;
+  int64 lastAttackTime = 2;
+  int64 curHp = 3;
+  int64 maxHp = 4;
+  string uid = 5;
+  string allianceId = 6;
+  string userName = 7;
+  string abbr = 8;
+  int64 createTime = 9;
+}
+message CrystalTalent {
+  repeated .protobuf.CrystalTalentNode nodes = 1;
+  int64 power = 2;
+  repeated .protobuf.Effect effects = 3;
+}
+message CrystalTalentNode {
+  int32 nodeId = 1;
+}

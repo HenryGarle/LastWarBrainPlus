@@ -1,0 +1,334 @@
+// Rebuilt from the descriptor in the game client's generated code (apk/src/Protobuf). Do not edit by hand.
+syntax = "proto3";
+package protobuf;
+option csharp_namespace = "LastWar.Client.Proto";
+import "ArmyUnitInfo.proto";
+import "StrongholdBankMessage.proto";
+import "WorldPointInfo.proto";
+
+message ReportAllianceInfo {
+  string allianceId = 1;
+  string alAbbr = 2;
+  string alName = 3;
+  string alIcon = 4;
+}
+message ReportPlayerInfo {
+  string uid = 1;
+  string name = 2;
+  string pic = 3;
+  int32 picVer = 4;
+  int32 srcServerId = 5;
+  int32 pointId = 6;
+  .protobuf.ReportAllianceInfo allianceInfo = 7;
+  int32 headFrame = 8;
+  int32 careerType = 9;
+  int32 careerLv = 10;
+  int32 level = 11;
+  int32 headSkinId = 12;
+  int32 curServerId = 13;
+  int32 worldId = 14;
+  bool isActiveAnonymity = 15;
+  int64 wolfEndTime = 16;
+}
+message BaseRoundReport {
+  int32 triggerIndex = 1;
+  int32 round = 2;
+  int32 value = 3;
+  int32 type = 4;
+  int32 skillId = 5;
+  int32 skillLevel = 6;
+  int32 heroId = 7;
+  int32 targetIndex = 8;
+  int32 health = 9;
+  int32 param = 10;
+}
+message EffectRoundReport {
+  .protobuf.BaseRoundReport baseReport = 1;
+  int32 time = 2;
+}
+message ReportRewardItem {
+  string type = 1;
+  int32 value = 2;
+}
+message ReportRewardResource {
+  int32 type = 1;
+  int32 value = 2;
+}
+message ReportRewardHeroExp {
+  int32 heroId = 1;
+  int32 level = 2;
+  int32 expAdd = 3;
+  int32 nowExp = 4;
+  int32 oldExp = 5;
+  int64 heroUuid = 6;
+}
+message ReportReward {
+  repeated .protobuf.ReportRewardItem rewardItems = 1;
+  repeated .protobuf.ReportRewardItem rewardResourceItems = 2;
+  repeated .protobuf.ReportRewardHeroExp rewardHeroExps = 3;
+  repeated .protobuf.ReportRewardResource rewardResources = 4;
+  int32 plunderResRate = 5;
+}
+message AllReportReward {
+  .protobuf.ReportReward reward = 1;
+  int64 uuid = 2;
+}
+message WorldMarchDeltaMeta {
+  int32 type = 1;
+  bool oneServerMarch = 2;
+}
+message WorldMarch {
+  string ownerName = 1;
+  int64 ownerFormationUuid = 2;
+  int32 worldId = 3;
+  float collectSpeed = 4;
+  int64 armyWeight = 5;
+  string allianceUid = 6;
+  int32 status = 7;
+  string path = 8;
+  int32 startPos = 9;
+  int32 targetPos = 10;
+  int32 target = 11;
+  int64 targetUuid = 12;
+  int64 startTime = 13;
+  int64 endTime = 14;
+  int64 teamUuid = 15;
+  int32 type = 16;
+  float speed = 17;
+  bool inBattle = 18;
+  bool isBroken = 19;
+  string diffPoint = 20;
+  bool isAnonymity = 21;
+  int32 pvpNum = 22;
+  int32 pveNum = 23;
+  int32 squadNo = 24;
+  string src_action = 25;
+  int32 srcServer = 26;
+  int32 server = 27;
+  int32 targetServer = 28;
+  bool fightMonster = 29;
+  int32 mainPointId = 30;
+  int64 blackStartTime = 31;
+  int64 blackEndTime = 32;
+  float blackSpeed = 33;
+  string allianceAbbr = 34;
+  string allianceName = 35;
+  string allianceIcon = 36;
+  string pic = 37;
+  int32 picVer = 38;
+  int32 headFrame = 39;
+  int32 headSkinId = 40;
+  int64 headSkinETime = 41;
+  int32 chatBubbleId = 42;
+  int64 chatBubbleETime = 43;
+  int32 worldType = 44;
+  int64 power = 45;
+  int32 baseVirusLayer = 46;
+  int32 extraVirusLayer = 47;
+  repeated .protobuf.ArmyCombatUnit armyCombatUnits = 48;
+  int32 monsterId = 49;
+  int32 monsterSpecialType = 52;
+  int32 fixedSoldierType = 50;
+  .protobuf.MonsterInfo monsterInfo = 51;
+  int64 holdUuid = 53;
+  int32 ownerServer = 54;
+  .protobuf.MeteoriteInfo meteoriteInfo = 55;
+  int64 ownerLightUuid = 56;
+  int32 catchZombieNum = 57;
+  int64 bloodyQueenMonsterUuid = 58;
+  int64 cityBattleS1RestBossUuid = 59;
+  string plunderRes = 60;
+  int32 pathStartServerId = 61;
+  int32 ownerCurServerId = 62;
+  bool assistAlly = 64;
+  .protobuf.WorldPointInfo stationPointInfo = 63;
+  int32 oldTargetType = 65;
+  oneof extra {
+    .protobuf.BankDeposit bankDeposit = 200;
+  }
+}
+message ArmyCombatUnit {
+  .protobuf.SimpleCombatUnit simpleCombatUnit = 1;
+  .protobuf.ArmyUnitInfo armyInfo = 2;
+  int32 specialArmyType = 3;
+  int32 formationIndex = 4;
+  int32 inAllianceTerritory = 5;
+}
+message CombineCombatUnit {
+  .protobuf.SimpleCombatUnit simpleCombatUnit = 1;
+  repeated .protobuf.ArmyCombatUnit members = 2;
+}
+message SimpleCombatUnit {
+  int32 initHealth = 1;
+  int32 health = 2;
+  int64 uuid = 3;
+  string uid = 4;
+}
+message CombatUnit {
+  int32 type = 1;
+  .protobuf.ArmyCombatUnit armyCombatUnit = 2;
+  .protobuf.CombineCombatUnit combineCombatUnit = 3;
+  .protobuf.SimpleCombatUnit simpleCombatUnit = 4;
+}
+message DamagePercentInfo {
+  int64 targetUuid = 1;
+  float damagePercent = 2;
+  float woundedPercent = 3;
+  float injuredPercent = 4;
+  float deadPercent = 5;
+  int64 selfUuid = 6;
+}
+message ArmyResultBase {
+  int32 pointId = 1;
+  .protobuf.CombatUnit armyObj = 2;
+  .protobuf.CombatUnit afterArmyObj = 3;
+  repeated int32 destroyValue = 4;
+  repeated .protobuf.DamagePercentInfo damagePercent = 5;
+}
+message BuildArmyResult {
+  .protobuf.ArmyResultBase base = 1;
+  int32 level = 2;
+  int32 buildId = 3;
+}
+message CityArmyResult {
+  .protobuf.ArmyResultBase base = 1;
+  int32 level = 2;
+}
+message MonsterArmyResult {
+  .protobuf.ArmyResultBase base = 1;
+  int32 monsterId = 2;
+}
+message AllianceCityArmyResult {
+  .protobuf.ArmyResultBase base = 1;
+  int32 cityId = 2;
+  int32 health = 3;
+  int32 initHealth = 4;
+  int32 afterHealth = 5;
+  string cityName = 6;
+}
+message PveArmyResult {
+  .protobuf.ArmyResultBase base = 1;
+  int32 monsterId = 2;
+}
+message ArmyResult {
+  int32 type = 1;
+  bool isDefeat = 2;
+  .protobuf.BuildArmyResult buildArmyResult = 3;
+  .protobuf.CityArmyResult cityArmyResult = 4;
+  .protobuf.ArmyResultBase simpleArmyResult = 5;
+  .protobuf.MonsterArmyResult monsterArmyResult = 6;
+  .protobuf.AllianceCityArmyResult allianceCityArmyResult = 7;
+  .protobuf.PveArmyResult pveArmyResult = 8;
+}
+message FightReport {
+  int64 uuid = 1;
+  .protobuf.ReportPlayerInfo selfInfo = 2;
+  .protobuf.ReportPlayerInfo otherInfo = 3;
+  .protobuf.ArmyResult selfArmyResult = 4;
+  .protobuf.ArmyResult otherArmyResult = 5;
+  .protobuf.ReportReward reward = 6;
+  int32 fightResult = 7;
+  repeated .protobuf.BattleEffectGroup otherBattleEffectGroups = 8;
+  repeated .protobuf.UnitAttrInfo unitAttrInfo = 9;
+  repeated .protobuf.AllReportReward allRewards = 10;
+}
+message UnitAttrInfo {
+  int64 uuid = 1;
+  repeated .protobuf.ArmyAttrInfo atkInfo = 4;
+  repeated .protobuf.ArmyAttrInfo defInfo = 5;
+}
+message ArmyAttrInfo {
+  int32 reason = 1;
+  float value = 2;
+}
+message BattlePointInfo {
+  int32 battleServerId = 1;
+  int32 serverType = 2;
+  int32 pointId = 3;
+  int32 worldId = 4;
+  int32 pointType = 5;
+  string ownerUid = 6;
+}
+message FightResLost {
+  int32 type = 1;
+  int32 value = 2;
+}
+message FightResItemLost {
+  int32 itemId = 1;
+  int32 value = 2;
+}
+message FightLost {
+  repeated .protobuf.FightResLost resLostArr = 1;
+  repeated .protobuf.FightResItemLost resItemLostArr = 2;
+}
+message AllFightLost {
+  .protobuf.FightLost lost = 1;
+  int64 uuid = 2;
+}
+message BattleReport {
+  int32 battleResult = 1;
+  int64 startTime = 2;
+  int32 startRound = 3;
+  .protobuf.BattlePointInfo battlePointInfo = 4;
+  repeated .protobuf.FightReport fightReports = 5;
+  .protobuf.FightLost fightLost = 6;
+  repeated .protobuf.BattleEffectGroup selfBattleEffectGroups = 7;
+  int32 version = 8;
+  repeated .protobuf.AllFightLost allFightLost = 9;
+  int32 marchType = 10;
+}
+message DetailReportPlayerInfo {
+  int32 index = 1;
+  string name = 2;
+  string alAbbr = 3;
+  bool isSelf = 4;
+  int32 infoType = 5;
+  int64 uuid = 6;
+}
+message BattleDetailInfo {
+  repeated .protobuf.BaseRoundReport roundReports = 1;
+  repeated .protobuf.EffectRoundReport effectReports = 2;
+  repeated .protobuf.DetailReportPlayerInfo playerInfos = 3;
+}
+message BattleEffectGroup {
+  int64 memberUuid = 1;
+  repeated .protobuf.BattleEffectInfo battleEffectInfos = 2;
+}
+message BattleEffectReason {
+  float value = 1;
+  int32 reason = 2;
+}
+message BattleEffectInfo {
+  int32 effectId = 1;
+  float value = 2;
+  repeated .protobuf.BattleEffectReason reasons = 3;
+}
+message BattleExtraPowerInfo {
+  int32 viewType = 1;
+  float value = 2;
+}
+message ReportRewardNeedCollect {
+  int32 pointId = 1;
+  bool inUserWorld = 2;
+  int64 rewardUuid = 3;
+}
+message MonsterCollectRewardMail {
+  int64 startTime = 1;
+  int32 monsterId = 2;
+  .protobuf.ReportRewardNeedCollect needCollectReward = 3;
+}
+message MonsterInfo {
+  int32 monsterId = 1;
+  int64 expireTime = 2;
+  int64 curHp = 3;
+  int64 maxHp = 4;
+  int32 state = 5;
+  int64 stateEndTime = 6;
+  string stateTriggerInfo = 7;
+  int32 type = 8;
+  int32 specialType = 9;
+  oneof extra {
+    .protobuf.DarknessMonster darknessMonster = 101;
+    .protobuf.CrocodileMonster CrocodileMonster = 102;
+  }
+}

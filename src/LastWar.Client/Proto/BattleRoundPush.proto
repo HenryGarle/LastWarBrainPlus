@@ -1,0 +1,46 @@
+// Rebuilt from the descriptor in the game client's generated code (apk/src/Protobuf). Do not edit by hand.
+syntax = "proto3";
+package protobuf;
+option csharp_namespace = "LastWar.Client.Proto";
+import "BattleReport.proto";
+
+message RoundStatusInfo {
+  int32 statusId = 1;
+  int32 time = 2;
+}
+message SimpleCombatUnitPushObj {
+  .protobuf.SimpleCombatUnit armyInfo = 1;
+  int32 type = 2;
+  int64 topUuid = 3;
+}
+message SimpleSelfArmyInfo {
+  .protobuf.SimpleCombatUnitPushObj armyInfo = 1;
+  .protobuf.SimpleCombatUnitPushObj targetInfo = 2;
+  int32 hurt = 3;
+  int32 heal = 4;
+  int32 shieldHurt = 5;
+  int32 shield = 6;
+  int32 anger = 7;
+  repeated .protobuf.RoundStatusInfo statusInfo = 8;
+}
+message CombineSelfArmyInfo {
+  repeated .protobuf.SimpleSelfArmyInfo members = 1;
+  .protobuf.SimpleCombatUnitPushObj targetInfo = 2;
+}
+message BaseRoundReportPush {
+  .protobuf.BaseRoundReport roundReport = 1;
+  int64 triggerUuid = 2;
+  int64 targetUuid = 3;
+}
+message EffectRoundReportPush {
+  .protobuf.EffectRoundReport roundReport = 1;
+  int64 triggerUuid = 2;
+  int64 targetUuid = 3;
+}
+message BattleRoundPushInfo {
+  int32 type = 1;
+  .protobuf.SimpleSelfArmyInfo simpleArmyInfo = 2;
+  .protobuf.CombineSelfArmyInfo combineArmyInfo = 3;
+  bool outRange = 4;
+  repeated .protobuf.BaseRoundReportPush roundReports = 5;
+}

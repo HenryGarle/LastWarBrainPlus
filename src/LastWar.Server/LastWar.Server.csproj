@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>LastWar.Server</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LastWar.Client\LastWar.Client.csproj" />
+    <ProjectReference Include="..\LastWar.Storage\LastWar.Storage.csproj" />
+    <ProjectReference Include="..\LastWar.Operations\LastWar.Operations.csproj" />
+  </ItemGroup>
+</Project>

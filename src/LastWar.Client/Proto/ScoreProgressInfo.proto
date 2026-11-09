@@ -1,0 +1,20 @@
+// Rebuilt from the descriptor in the game client's generated code (apk/src/Protobuf). Do not edit by hand.
+syntax = "proto3";
+package protobuf;
+option csharp_namespace = "LastWar.Client.Proto";
+
+message ScoreProgressAllianceInfo {
+  string allianceId = 1;
+  string allianceAbbr = 2;
+  string allianceName = 3;
+  string allianceIcon = 4;
+  int32 serverId = 5;
+  int64 score = 6;
+  int32 speed = 7;
+}
+message ScoreProgressInfo {
+  int64 score = 1;
+  int32 speed = 2;
+  int32 startTime = 3;
+  repeated .protobuf.ScoreProgressAllianceInfo participantList = 4;
+}

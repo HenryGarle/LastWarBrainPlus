@@ -1,0 +1,52 @@
+# ---- build output ----
+bin/
+obj/
+**/bin/
+**/obj/
+*.user
+*.suo
+.vs/
+.vscode/
+.idea/
+TestResults/
+
+# ---- web ----
+web/node_modules/
+web/dist/
+# Built by `npm run build` (Vite writes the UI into the server); the Docker build makes its own.
+src/LastWar.Server/wwwroot/
+
+# ---- secrets and machine-specific settings - never commit ----
+.env
+.env.*
+!deploy/.env.example
+deploy/server.txt
+*.pfx
+*.key
+*session*.json
+.lastwar_goclient_*
+
+# ---- runtime data, logs, local copies ----
+deploy/data/
+deploy/backups/
+*.log
+*.db
+*.db-shm
+*.db-wal
+*.dump
+*.tgz
+_to_delete/
+
+# local working data (sessions hold live tokens)
+data/
+
+# ---- game client / decompile / archives - never in the repo ----
+apk/
+*.apk
+*.apkm
+*.xapk
+*.luac
+*.mdl
+*.7z
+*.zip
+node_modules/

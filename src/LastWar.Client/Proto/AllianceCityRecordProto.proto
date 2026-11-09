@@ -1,0 +1,47 @@
+// Rebuilt from the descriptor in the game client's generated code (apk/src/Protobuf). Do not edit by hand.
+syntax = "proto3";
+package protobuf;
+option csharp_namespace = "LastWar.Client.Proto";
+
+message AllianceCityUserRecord {
+  string uid = 1;
+  int64 point = 2;
+}
+message AllianceCityRecordProto {
+  repeated .protobuf.AllianceCityUserRecord killUserRecords = 1;
+  repeated .protobuf.AllianceCityUserRecord destroyUserRecords = 2;
+}
+message AllianceCityOccupyInfo {
+  int32 cityId = 1;
+  string abbr = 2;
+  string allainceId = 3;
+  int32 color = 4;
+  string cityName = 5;
+  string allianceName = 6;
+  int32 occupyServerId = 7;
+  int64 firstOccupyTime = 8;
+}
+message WorldAllAllianceCityInfo {
+  repeated .protobuf.AllianceCityOccupyInfo infoes = 1;
+}
+message WorldAllianceOccupyInfo {
+  repeated .protobuf.AllianceOccupyInfo AllianceOccupyInfo = 1;
+  repeated .protobuf.ServerDestroyInfo serverDestroyInfo = 2;
+}
+message AllianceOccupyInfo {
+  string allianceId = 1;
+  string abbr = 2;
+  int32 color = 3;
+  string cityName = 4;
+  string allianceName = 5;
+  int32 occupyServerId = 6;
+  repeated .protobuf.CityInfo cityInfo = 7;
+  repeated .protobuf.CityInfo destroyInfo = 8;
+}
+message CityInfo {
+  int32 cityId = 1;
+}
+message ServerDestroyInfo {
+  int32 serverId = 1;
+  repeated int32 destroyCityIds = 2;
+}

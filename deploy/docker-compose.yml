@@ -1,0 +1,87 @@
+# LastWar on one server: Postgres, the app, Caddy (HTTPS) and a nightly database dump.
+#   cd /opt/lastwar && docker compose up -d --build
+# Settings come from .env next to this file (see .env.example). Runbook: README.md.
+name: lastwar
+
+services:
+  db:
+    image: postgres:18
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: lastwar
+      POSTGRES_DB: lastwar
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      # Byte-order text sorting (like the local setup): ISO timestamps compare exactly as stored.
+      # The app depends on this - do not change it.
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale-provider=builtin --builtin-locale=C.UTF-8"
+    volumes:
+      - pg:/var/lib/postgresql
+    # Only the server itself can reach it; from the PC use an SSH tunnel (README "Reading the database").
+    ports:
+      - "127.0.0.1:5432:5432"
+    shm_size: 512mb
+    # Sized for an 8 GB server that also runs the app.
+    command: [postgres, -c, shared_buffers=2GB, -c, effective_cache_size=5GB, -c, work_mem=64MB,
+              -c, maintenance_work_mem=512MB, -c, max_wal_size=4GB]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lastwar -d lastwar"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: ..
+    image: lastwar-server
+    restart: unless-stopped
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      pg: "Host=db;Username=lastwar;Password=${POSTGRES_PASSWORD};Database=lastwar;Command Timeout=0;Timeout=30;Gss Encryption Mode=Disable"
+      scheduler: ${SCHEDULER:-on}
+      Logging__LogLevel__Default: Warning
+      Logging__LogLevel__Microsoft.AspNetCore: Warning
+    volumes:
+      - ./data:/srv/lastwar/data
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    depends_on: [app]
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+      - "${HTTPS_PORT:-443}:443/udp"
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN in .env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+
+  # One compressed dump a day in ./backups, keeping BACKUP_DAYS of them. The server's own backups
+  # (Hetzner) include this folder; copy it off the server too (README.md).
+  backup:
+    image: postgres:18
+    restart: unless-stopped
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      BACKUP_DAYS: ${BACKUP_DAYS:-14}
+    volumes:
+      - ./backups:/backups
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        while true; do
+          f=/backups/lastwar_$$(date -u +%Y%m%d_%H%M).dump
+          if pg_dump -h db -U lastwar -d lastwar -Fc -f "$$f.part"; then mv "$$f.part" "$$f"; echo "backup: $$f"; else rm -f "$$f.part"; echo "backup FAILED"; fi
+          find /backups -name 'lastwar_*.dump' -mtime +$$BACKUP_DAYS -delete
+          sleep 86400
+        done
+
+volumes:
+  pg:
+  caddy-data:
+  caddy-config:

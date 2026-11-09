@@ -1,0 +1,12 @@
+**/bin
+**/obj
+**/node_modules
+web/dist
+src/LastWar.Server/wwwroot
+.env
+deploy
+backups
+cmp
+*.log
+.git
+docs

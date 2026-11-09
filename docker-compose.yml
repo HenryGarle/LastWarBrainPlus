@@ -1,0 +1,47 @@
+# Local Postgres for LastWar development.
+#   Start:   docker compose up -d
+#   Stop:    docker compose stop          (data kept)
+#   Logs:    docker compose logs -f postgres
+#   psql:    docker compose exec postgres psql -U lastwar
+#
+# The password comes from .env next to this file (POSTGRES_PASSWORD=...). The data lives in a named
+# Docker volume (inside WSL, fast) rather than a Windows folder, which is slow and has permission
+# problems. Only this machine can connect (127.0.0.1).
+services:
+  postgres:
+    image: postgres:18
+    container_name: lastwar-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: lastwar
+      POSTGRES_DB: lastwar
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      # Byte-order text sorting (like SQLite): ISO timestamps and ids compare exactly as stored.
+      # A language collation would ignore '-', ':' and '.', and mis-order timestamps of different precision.
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale-provider=builtin --builtin-locale=C.UTF-8"
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - lastwar-pg:/var/lib/postgresql
+    # Sized for a dev box with WSL's ~15 GB: bigger caches for the report queries, and
+    # time-series friendly settings. Adjust down if memory is tight.
+    command:
+      - postgres
+      - -c
+      - shared_buffers=2GB
+      - -c
+      - effective_cache_size=6GB
+      - -c
+      - work_mem=64MB
+      - -c
+      - maintenance_work_mem=512MB
+      - -c
+      - max_wal_size=4GB
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lastwar -d lastwar"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  lastwar-pg:

@@ -1,0 +1,247 @@
+// Rebuilt from the descriptor in the game client's generated code (apk/src/Protobuf). Do not edit by hand.
+syntax = "proto3";
+package protobuf;
+option csharp_namespace = "LastWar.Client.Proto";
+import "ArmyUnitInfo.proto";
+import "BattleReport.proto";
+import "Mail.proto";
+
+message LwBattleUnitStat {
+  float damage = 1;
+  float injured = 2;
+  float enhance = 3;
+  float weaken = 4;
+  float critDamage = 5;
+  int32 critNum = 6;
+  int32 dizzyNum = 7;
+  float physicalInjured = 8;
+  float magicInjured = 9;
+  float dotDamage = 10;
+  float sputterDamage = 11;
+  float physicalDamage = 12;
+  float magicDamage = 13;
+  int32 damageNum = 14;
+  int32 defenseNum = 15;
+  float defenseDamage = 16;
+  map<int32, float> skillDamageMap = 17;
+  map<int32, float> skillInjuredMap = 18;
+  int32 dispelNum = 19;
+  int32 dispelDebufNum = 20;
+  float realDamage = 21;
+  float shieldDamage = 22;
+  int32 immuneBuffCount = 23;
+}
+message LwBattleUnit {
+  int32 heroId = 1;
+  int32 heroLevel = 2;
+  int32 index = 3;
+  int64 heroUuid = 4;
+  repeated .protobuf.HeroSkillInfoProto skillInfos = 5;
+  repeated .protobuf.BattleEffectInfo effects = 6;
+  int64 maxHp = 7;
+  int64 hp = 8;
+  int64 hpBeforeStart = 9;
+  int32 rankLv = 10;
+  repeated .protobuf.HeroEquipInfoProto equipInfos = 11;
+  .protobuf.LwBattleUnitStat stat = 12;
+  int32 maxSoldierCount = 13;
+  int32 soldierCount = 14;
+  int32 skinId = 15;
+  int32 unitType = 16;
+  repeated .protobuf.SkillChipProto skillChipInfos = 17;
+  int32 weaponLevel = 18;
+  int32 weaponPower = 19;
+  int32 summonId = 20;
+  int32 exprireTime = 21;
+  string name = 22;
+  repeated .protobuf.WeaponStrengthen weaponStrengthen = 23;
+  map<int32, .protobuf.LwSoldierLost> soldierBeforeStart = 24;
+  int32 awakenLv = 25;
+  int32 heroSkinId = 26;
+}
+message LwArmyUnitInfo {
+  repeated .protobuf.LwBattleUnit units = 1;
+}
+message UnitBuffChange {
+  int32 buffId = 1;
+  repeated .protobuf.BattleEffectInfo effectChanges = 2;
+  int32 skillLevel = 3;
+  bool remove = 4;
+  int64 buffDuration = 5;
+}
+message TargetHit {
+  int32 index = 1;
+  int32 miss = 2;
+  int32 crit = 3;
+  int32 damage = 4;
+  repeated .protobuf.BattleEffectInfo effectChanges = 5;
+  repeated .protobuf.UnitBuffChange buffChanges = 6;
+  double damageDouble = 7;
+  float shieldChange = 8;
+  float shieldTotal = 9;
+  int32 dotDamageOnce = 10;
+  repeated .protobuf.DotDamageDetail dotDamageDetail = 11;
+  bool defense = 12;
+  bool attackBack = 13;
+  string debugInfo = 15;
+}
+message DotDamageDetail {
+  int32 buffId = 1;
+  int32 damage = 2;
+  int32 startTime = 3;
+  int32 dotTimes = 4;
+}
+message FightAction {
+  int32 id = 1;
+  int32 order = 2;
+  int32 time = 3;
+  int32 casterIndex = 4;
+  int32 phase = 5;
+  int32 skillId = 6;
+  repeated .protobuf.TargetHit targets = 7;
+  int32 skillBuffId = 8;
+  int32 skillLevel = 9;
+  string debugInfo = 10;
+  int32 bulletIndex = 11;
+  int32 actionParamType = 12;
+  repeated .protobuf.LwBattleUnit summonUnit = 13;
+  int32 casterState = 14;
+  int32 effectId = 15;
+}
+message LwBattleDetail {
+  int64 uuid = 1;
+  repeated .protobuf.FightAction actions = 2;
+}
+message LwSoldierLost {
+  int32 soldierId = 1;
+  int32 lost = 2;
+  int32 injured = 3;
+  int32 wounded = 4;
+  int32 dead = 5;
+  int32 total = 6;
+  int32 degrade = 7;
+}
+message LwSoldierCount {
+  int32 soldierId = 1;
+  int32 count = 2;
+}
+message LwBattlePlayerStat {
+  .protobuf.ReportPlayerInfo user = 1;
+  int32 contentId = 2;
+  int32 maxSoldierPower = 3;
+  int32 soldierPower = 4;
+  repeated .protobuf.BattleEffectInfo effects = 5;
+  int32 totalHeroPower = 6;
+  repeated .protobuf.LwSoldierLost soldierLost = 7;
+  int32 armyType = 8;
+  int32 soldierPowerBeforeStart = 9;
+  bool isHospitalFull = 10;
+  .protobuf.ArmyProgress progress = 11;
+  repeated .protobuf.LwSoldierLost soldierBeforeStart = 12;
+  int32 maxSoldierCount = 13;
+  int32 soldierCountBeforeStart = 14;
+  int32 soldierCount = 15;
+  int32 chipTotalLevel = 16;
+  float deadRate = 17;
+  repeated .protobuf.BattleExtraPowerInfo extraPowers = 18;
+  map<int32, float> powerTabMap = 19;
+  int32 weaponStrengTotalLv = 20;
+  .protobuf.BattleCardModule battleCard = 21;
+  repeated .protobuf.LwSoldierCount woundedToRemainDetail = 22;
+  .protobuf.SoldierElevenProto soldierEleven = 23;
+  int32 specialUnitType = 24;
+  int32 armyStartPower = 25;
+  .protobuf.OtherTabPowerInfo otherTabPowerInfo = 26;
+  repeated .protobuf.LwSoldierCount seasonPvpDeadReduce = 27;
+  int32 monsterId = 28;
+  float injured_rate = 29;
+  repeated .protobuf.LwSoldierRateBreakdownItem injured_rate_breakdown = 30;
+  repeated .protobuf.LwSoldierRateBreakdownItem dead_rate_breakdown = 31;
+  .protobuf.CrystalTalent crystalTalent = 32;
+}
+message LwSoldierRateBreakdownItem {
+  int32 source_id = 1;
+  float value = 2;
+}
+message OtherTabPowerInfo {
+  bool isOpen = 1;
+  repeated .protobuf.OtherTabPowerInfoSingle powerInfo = 2;
+}
+message OtherTabPowerInfoSingle {
+  int32 tabType = 1;
+  float value = 2;
+}
+message LwBattlePlayerCombineStat {
+  .protobuf.LwBattlePlayerStat player = 1;
+  int32 mvp = 2;
+  int32 totalDamageSoldierPower = 3;
+  int32 index = 6;
+  int32 side = 7;
+  int32 totalDamage = 8;
+  double totalDamageDouble = 9;
+}
+message LwAllianceCityInfo {
+  int32 cityId = 1;
+  int32 maxDurability = 2;
+  int32 durability = 3;
+  int32 durabilityBeforeStart = 4;
+}
+message LwMonsterInvasionInfo {
+  int32 damage = 1;
+  int32 curHp = 2;
+  bool isCrit = 3;
+}
+message LwAllianceBossSand {
+  string uid = 1;
+  int64 damage = 2;
+  bool isCrit = 3;
+}
+message LwBattleReport {
+  int64 uuid = 1;
+  int32 type = 2;
+  int64 battleTime = 3;
+  .protobuf.BattlePointInfo battlePointInfo = 4;
+  int32 fightResult = 5;
+  repeated .protobuf.LwBattlePlayerStat player = 6;
+  repeated .protobuf.LwBattleUnit units = 8;
+  .protobuf.Reward reward = 10;
+  .protobuf.LwBattleDetail detail = 12;
+  int64 winKillSoldier = 13;
+  int64 plunderValue = 14;
+  int64 maxPlunderValue = 15;
+  int32 totalTime = 16;
+  int32 overTime = 17;
+  string address = 19;
+  int32 version = 20;
+  repeated .protobuf.LwBattlePlayerCombineStat combinePlayer = 21;
+  repeated .protobuf.LwBattleCombineRound round = 22;
+  int32 isCombineReport = 23;
+  int32 isAllKill = 24;
+  .protobuf.LwAllianceCityInfo allianceCityInfo = 30;
+  repeated .protobuf.LwSoldierLost winKillSoldierDetail = 31;
+  repeated .protobuf.LwSoldierLost hospitalFullDeadDetail = 32;
+  repeated .protobuf.LwSoldierLost ricochetDetail = 33;
+  .protobuf.LwMonsterInvasionInfo monsterInvasionInfo = 34;
+  repeated .protobuf.LwSoldierLost atkMummyBlowUpResultDetail = 35;
+  repeated .protobuf.LwSoldierLost defMummyBlowUpResultDetail = 36;
+  .protobuf.MeteoriteInfo plunderMeteoriteInfo = 37;
+  repeated .protobuf.LwAllianceBossSand allianceBossSand = 38;
+  repeated int32 monsterBuffList = 39;
+  repeated .protobuf.LwBattleChampionDuelScore championDuelScore = 40;
+  int32 marchTargetType = 41;
+  int32 parallelExecuteProcess = 42;
+  repeated .protobuf.LwBattleUnit summonUnits = 50;
+}
+message LwBattleChampionDuelScore {
+  int32 killScore = 1;
+  int32 aliveScore = 2;
+  int32 winScore = 3;
+}
+message LwBattleCombineRound {
+  repeated .protobuf.LwBattleReport battle = 1;
+  int32 roundIndex = 2;
+}
+message LwCommonJsonOss {
+  int32 type = 1;
+  string jsonData = 2;
+}

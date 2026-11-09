@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/LastWar.Cli/LastWar.Cli.csproj" />
+    <Project Path="src/LastWar.Client/LastWar.Client.csproj" />
+    <Project Path="src/LastWar.Core/LastWar.Core.csproj" />
+    <Project Path="src/LastWar.Lua/LastWar.Lua.csproj" />
+    <Project Path="src/LastWar.Protocol/LastWar.Protocol.csproj" />
+    <Project Path="src/LastWar.Server/LastWar.Server.csproj" />
+    <Project Path="src/LastWar.Storage/LastWar.Storage.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/LastWar.Tests/LastWar.Tests.csproj" />
+  </Folder>
+</Solution>

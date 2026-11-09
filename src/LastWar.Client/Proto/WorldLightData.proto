@@ -1,0 +1,17 @@
+// Rebuilt from the descriptor in the game client's generated code (apk/src/Protobuf). Do not edit by hand.
+syntax = "proto3";
+package protobuf;
+option csharp_namespace = "LastWar.Client.Proto";
+
+message LightData {
+  int32 pointId = 1;
+  int32 radius = 2;
+  int32 level = 3;
+}
+message PushLightChange {
+  .protobuf.LightData light = 1;
+  bool state = 2;
+}
+message RangeLightData {
+  repeated .protobuf.LightData lightList = 1;
+}

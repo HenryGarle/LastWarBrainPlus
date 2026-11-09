@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- The game's own battle report schema (Proto/*.proto, from its Lua): shared reports are protobuf LwBattleReport. -->
+    <PackageReference Include="Google.Protobuf" Version="3.*" />
+    <PackageReference Include="Grpc.Tools" Version="2.*" PrivateAssets="all" />
+    <Protobuf Include="Proto\*.proto" ProtoRoot="Proto" GrpcServices="None" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LastWar.Core\LastWar.Core.csproj" />
+    <ProjectReference Include="..\LastWar.Protocol\LastWar.Protocol.csproj" />
+  </ItemGroup>
+</Project>

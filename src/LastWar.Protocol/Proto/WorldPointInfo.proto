@@ -1,0 +1,184 @@
+syntax = "proto3";  // 指定使用 proto3 语法
+package protobuf;
+option java_package = "net.im30.aps.model.protobuf";
+
+enum SpecialType {
+  NONE = 0;
+  DETECT_EVENT = 1; // 雷达事件点
+}
+
+message BuildInfo {
+  string ownerUid = 1;
+  int64 uuid = 2;
+  int32 buildId = 3;
+  int32 level = 4;
+  int32 buildState = 5;
+  int32 queueState = 6;
+  string allianceId = 7;
+  int32 updateEndTime = 8;
+  int32 updateStartTime = 9;
+  int32 lastHpTime = 10; // 上次回血时间
+  int32 protectEndTime = 11; // 保护结束时间
+  int32 inside = 12; // 是否城内建筑
+  int32 currentHp = 13;// 当前血量
+  string name = 14; // 玩家名称(仅大本显示)
+  string alAbbr = 15; // 联盟简称(仅大本显示)
+  int32 lastCollectTime = 16; // 资源站上次采集时间
+  int32 unavailableTime = 17; // 资源站不可用时间
+  int32 monthCardEndTime = 18; //月卡结束时间 单位s
+  int32 queueItemId = 19;// 队列id
+  int32 queueStartTime = 20;// 队列开始
+  int32 queueUpdateTime = 21; // 队列结束
+  int32 destroyStartTime = 22;// 废墟开始时间
+  int32 appearanceId = 23; // 城市外观ID
+  SpecialType specialType = 24;
+  string positionId = 25; //王座官职id
+}
+
+message RoadInfo {
+  string ownerUid = 1;
+  int64 uuid = 2;
+  int32 roadState = 3;
+  int32 inside = 4;
+  int32 currentHp = 5; // 当前血量
+  string allianceId = 6;
+}
+
+message CollectResourceInfo {
+  int32 resourceType = 1;
+  int32 level = 2;
+  int32 type = 3;
+  int32 attachId = 4;
+}
+
+message ResourceInfo {
+  int32 resourceId = 1;
+  int32 state = 2;
+  int64 gatherUuid = 3;
+}
+
+message ExplorePointInfo{
+  string ownerUid = 1;
+  int64 uuid = 2;
+  string eventId = 3;
+}
+
+message SamplePointInfo{
+  string ownerUid = 1;
+  int64 uuid = 2;
+  string eventId = 3;
+}
+
+message GarbagePointInfo{
+  string ownerUid = 1;
+  int64 uuid = 2;
+  string eventId = 3;
+  int64 endTime = 4;  
+}
+
+message AllianceCityPointInfo {
+  int32 cityId = 1;
+  int32 openTime = 2;
+  int32 state = 3;
+  int32 protectTime = 4;
+  string alAbbr = 5;
+  string allianceId = 7;
+  int32 durability = 8;
+  int32 lastDurabilityTime = 9;
+  string alName = 10;
+  int32 giveUpTime = 11;
+  string cityName = 12;
+}
+
+message CollectRewardInfo {
+  string ownerUid = 1;
+  int64 uuid = 2;
+  int64 expireTime = 3;
+  int32 contentId = 4;
+}
+
+message AllianceBuildingPointInfo {
+  int64 uuid = 1;
+  int32 buildId = 2;
+  int32 level = 3;
+  int32 state = 4;
+  string alAbbr = 5;
+  string allianceId = 6;
+}
+
+message WorldPointInfo {
+  int32 id = 1;
+  int32 pointType = 2;
+  BuildInfo buildInfo = 3;
+  RoadInfo roadInfo = 4;
+  CollectResourceInfo collectResourceInfo = 5;
+  ResourceInfo resourceInfo = 6;
+  ExplorePointInfo explorePointInfo = 7;
+  SamplePointInfo samplePointInfo = 8;
+  GarbagePointInfo garbagePointInfo = 9;
+  AllianceBossS0BuildPointInfo allianceBossS0BuildPointInfo = 25; // Marshal's Guard (the Alliance Trap)
+  
+  int64 uuid = 100;
+  bytes extraInfo = 101;
+  int32 serverId = 102; //当前服
+}
+
+message LandPointInfo{
+  int32 id = 1;
+  int32 landId = 2;
+  int32 serverId = 3;//当前服
+}
+
+message DesertInfo {
+  int32 id = 1;
+  int64 uuid = 2;
+  int32 desertId = 3;
+  int32 protectEndTime = 4;
+  string uid = 5;
+  string allianceId = 6;
+  int32 serverId = 7;
+  bool hasAssistance = 8;
+}
+// From the 1.0.363 decompile (apk/src/Protobuf). Only the fields the map view reads.
+message AllianceBossS0BuildPointInfo {
+  string allianceId = 1;
+  int32 cfgId = 2;      // activity_alliance_boss_s0 id = difficulty level
+  string abbr = 3;
+  int64 startTime = 4;
+  int64 lastReserveTime = 5;
+  int64 actEndTime = 6;
+}
+
+message CityStrongholdPointInfo {
+  int32 strongholdId = 1;
+  int32 state = 3;
+  int32 protectTime = 4;
+  string alAbbr = 5;
+  string allianceId = 7;
+  string alName = 10;
+  string cityName = 12;
+}
+
+message CityTradePointInfo {
+  int32 tradeId = 1;
+  int32 state = 2;
+  string uid = 3;
+  string userName = 4;
+  string alAbbr = 9;
+  string allianceId = 10;
+  string alName = 11;
+}
+
+message CityMiniGamePointInfo {
+  int32 cityId = 1;
+  int32 gameCityState = 2;
+  string uid = 3;
+  string userName = 4;
+}
+// world.get.block "greenPoints": greened (not contaminated) tiles of one 10x10-tile AOI block (index = by*100+bx).
+// Season 3 land is sand/contaminated except where it has been greened. (apk WorldGreen.ParseWorldGreenArea)
+message IndexGreenPoints {
+  int32 index = 1;
+  repeated int32 points = 2;
+  int64 timeStamp = 3;
+}
