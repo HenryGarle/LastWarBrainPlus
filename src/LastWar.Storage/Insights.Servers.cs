@@ -72,11 +72,20 @@ public sealed partial class Insights
     {
         new ServerRegistry(path).EnsureSchema();
         using var c = Open();
+        // Game readings (newest per server, by = 'game') plus hand-entered groups (by = 'hand') for any server the game
+        // has not yet reported on that config. A server can show twice: its current config from the game and an
+        // upcoming one entered by hand.
         return Q(c, """
-            SELECT DISTINCT ON (s.server_id) s.server_id AS server, s.cfg_id AS cfg, s.first_seen AS since, s.last_seen AS seen,
-                   g.season, g.pre_start AS "preStart", g.start_time AS start, g.end_time AS "end"
-            FROM server_season_cfg s LEFT JOIN game_season g ON g.id = s.cfg_id
-            WHERE s.server_id BETWEEN @lo AND @hi ORDER BY s.server_id, s.last_seen DESC, s.first_seen DESC;
+            SELECT x.*, g.season, g.pre_start AS "preStart", g.start_time AS start, g.end_time AS "end" FROM (
+              SELECT DISTINCT ON (s.server_id) s.server_id AS server, s.cfg_id AS cfg, s.first_seen AS since, s.last_seen AS seen, 'game' AS by
+              FROM server_season_cfg s WHERE s.server_id BETWEEN @lo AND @hi ORDER BY s.server_id, s.last_seen DESC, s.first_seen DESC
+            ) x LEFT JOIN game_season g ON g.id = x.cfg
+            UNION ALL
+            SELECT h.server_id, h.cfg_id, h.entered_at, h.entered_at, 'hand', g.season, g.pre_start, g.start_time, g.end_time
+            FROM server_season_hand h LEFT JOIN game_season g ON g.id = h.cfg_id
+            WHERE h.server_id BETWEEN @lo AND @hi
+              AND NOT EXISTS (SELECT 1 FROM server_season_cfg s WHERE s.server_id = h.server_id AND s.cfg_id = h.cfg_id)
+            ORDER BY server;
             """, ("@lo", (long)lo), ("@hi", (long)hi));
     }
 

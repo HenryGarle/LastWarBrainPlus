@@ -66,20 +66,37 @@ key = 0e 2a 0d 28 ?? 03 23 02 0e     (position 4 is the separator, cipher byte a
 lw:3f133a1c44321a3736 -> 1974|1958
 ```
 
-Chosen because 239/248 codes then decode to two servers in the same 64-block with no duplicates; confirmed by Henry's
-lists below. S3 codes: 1497 1974|1958, 1498 1961|1975, 1499 1971|1960, 1500 1978|1964, 1501 2004|1989,
-1502 2009|1991, 1503 1998|2002, 1504 2017|2013. Shorter codes (2-8 bytes) are other formats, not decoded.
+Chosen because 239/248 codes then decode to two servers in the same 64-block with no duplicates.
+Shorter codes (2-8 bytes) are other formats, not decoded.
 
-What the pair means: in both lists Henry gave, it is the group's two strongest servers (top-100 power). It is not the
-4 v 4 pairing. The other 6 servers are not in any table.
+THE GAME RE-DREW S3 (found 2026-11-09): table version 40210 (downloaded 2026-11-09 07:48) changed two codes.
 
-Henry's S3 lists (seen elsewhere, 2026-11-07):
+| cfg | table 40125 (2026-11-07) | table 40210 (2026-11-09) |
+|---|---|---|
+| 1497 | 1974, 1958 | 1974, 1958 |
+| 1498 | 1961, 1975 | 1961, 1978 |
+| 1499 | 1971, 1960 | 1971, 1960 |
+| 1500 | 1978, 1964 | 1969, 1975 |
+| 1501-1504 | 2004/1989, 2009/1991, 1998/2002, 2017/2013 | unchanged |
+
+Henry's in-game display (2026-11-09) for 1500: 1962, 1963, 1965, 1967, 1969, 1975, 1976, 1984 - contains both servers
+the new table names. Entered by hand (below).
+
+Henry's older lists (seen elsewhere, 2026-11-07) are the EARLIER draw - 1965, 1975 and 1984 have since moved to 1500,
+so do not trust them:
 - 1497: 1957, 1958, 1959, 1965, 1970, 1972, 1974, 1980
 - 1498: 1961, 1973, 1975, 1977, 1979, 1982, 1984, 1988
 
-Known S3 (2026-11-09): full for 1497 and 1498 from Henry's lists above; two strongest each from the camp_sever_local
-decode for the rest - 1499 1971,1960; 1500 1978,1964; 1501 2004,1989; 1502 2009,1991; 1503 1998,2002; 1504 2017,2013.
-The remaining 6 per group come from the servers.season read on/after 2026-11-23.
+What the pair means: on the old draw it matched the group's two strongest servers (top-100 power); not rechecked
+against the new draw. It is not the 4 v 4 pairing. The other 6 servers are not in any table.
+
+## Hand-entered groups
+
+`server_season_hand (cfg_id, server_id, entered_at)`. Set with admin `PUT /api/season-groups/hand/{cfg}`
+`{"servers":[...]}` (replaces that cfg's list; `[]` removes it). `/api/x/season-groups` returns them with `by: "hand"`
+next to the game readings (`by: "game"`); a hand row drops out per server as soon as servers.season sees that server
+on that cfg. The Season groups card shows them in italics with `*`. Entered 2026-11-09: 1500 (Henry's list above).
+On/after 2026-11-23 check any server the game puts on a different cfg than the hand list - that row stays visible.
 
 Tested and rejected as a rule for the rest: snake/round-robin drafts by any power measure we hold; "2 per strength pot of 8"
 fits both lists on our 2026-09-25 data but our data starts after S2 ended and transfers began, so pots do not line up
@@ -90,3 +107,7 @@ fits both lists on our 2026-09-25 data but our data starts after S2 ended and tr
 
 `C:\Temp\LWC\data\raw\guestx` (console, guests only): modes `newblank` (chosen zone, blank uid), `rawgsl` (raw gateway
 reply), `newacct <a,b,c>` (new_account for each target from one guest). Outputs data\raw\guestx_*.txt.
+
+## Season group dashboard
+
+Explore > Season group (#/x/season/<cfg>, ?home=<server>). Servers side by side on 12 measures, where one server stands (rank, vs median, gap to #1/#2), bars per measure, an alliance ranking guess (fighting strength = hero power x recency, every alliance with 5+ members) and the group's 50 strongest players. Seeds come from game_season.seeds (decoded at table ingest). Built 2026-11-09.

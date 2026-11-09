@@ -106,7 +106,8 @@ function SeasonGroups({ lo, hi, highlight }) {
   if (!g || g.error || g.length === 0) return null;
   const by = new Map();
   g.forEach((r) => { if (!by.has(r.cfg)) by.set(r.cfg, []); by.get(r.cfg).push(r); });
-  const seen = g.reduce((m, r) => (r.seen > m ? r.seen : m), "");
+  const seen = g.filter((r) => r.by !== "hand").reduce((m, r) => (r.seen > m ? r.seen : m), "");
+  const anyHand = g.some((r) => r.by === "hand");
   const date = (s) => (s ? String(s).slice(0, 10).replaceAll("/", "-") : "");
   return (
     <div className="card">
@@ -118,12 +119,13 @@ function SeasonGroups({ lo, hi, highlight }) {
             <tr key={cfg}>
               <td className="mono">{cfg}</td><td>{rs[0].season ? `S${rs[0].season}` : ""}</td>
               <td className="mono muted">{date(rs[0].preStart)}</td><td className="mono">{date(rs[0].start)}</td><td className="mono muted">{date(rs[0].end)}</td>
-              <td>{rs.map((r, j) => <span key={r.server}>{j > 0 && ", "}<a href={`#/x/server/${r.server}`} style={highlight(r.server) ? { fontWeight: 600 } : { opacity: 0.6 }}>{r.server}</a></span>)}</td>
+              <td>{rs.map((r, j) => <span key={r.server}>{j > 0 && ", "}<a href={`#/x/server/${r.server}`} title={r.by === "hand" ? `entered by hand ${date(r.since)} - not yet reported by the game` : undefined} style={{ ...(highlight(r.server) ? { fontWeight: 600 } : { opacity: 0.6 }), ...(r.by === "hand" ? { fontStyle: "italic" } : {}) }}>{r.server}{r.by === "hand" && "*"}</a></span>)}</td>
             </tr>
           ))}
         </tbody>
       </table>
-      <p className="small muted">Read {when(seen)}. A guest asks the game to start a character on each server; a server in a season refuses and names the season config it is on. Servers on one config share a season map. The game switches a server to its next season&apos;s config at pre-season.</p>
+      <p className="small muted">Read {when(seen)}. A guest asks the game to start a character on each server; a server in a season refuses and names the season config it is on. Servers on one config share a season map. The game switches a server to its next season&apos;s config when that season STARTS, not at pre-season.</p>
+      {anyHand && <p className="small muted"><i>1234*</i> = entered by hand from the in-game display, until the game reports that server on that config. Such a server also still shows on its current config.</p>}
     </div>
   );
 }

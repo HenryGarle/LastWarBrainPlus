@@ -12,6 +12,7 @@ import { OnlineComparePage } from "../explorer/Online.jsx";
 import { ServersPage } from "../explorer/ServersPage.jsx";
 import { HqLevelsPage } from "../explorer/HqLevels.jsx";
 import { PlayersPage } from "../explorer/PlayersPage.jsx";
+import { SeasonGroupPage } from "../explorer/SeasonGroup.jsx";
 import { FavStar } from "../explorer/favs.jsx";
 import { SendPosition } from "./Account.jsx";
 import { useJson } from "../explorer/PlayerTabs.jsx";
@@ -75,12 +76,13 @@ const SECTIONS = [
   ["online", "Server activity", "#/x/online"],
   ["hq", "HQ levels", "#/x/hq"],
   ["servers", "Servers & groups", "#/x/servers"],
+  ["season", "Season group", "#/x/season"],
   ["hero", "Hero power model", "#/x/hero"],
 ];
-const OWN = ["rankings", "compare", "names", "hero", "newaccounts", "online", "servers", "hq", "players"];
+const OWN = ["rankings", "compare", "names", "hero", "newaccounts", "online", "servers", "season", "hq", "players"];
 const sectionOf = (kind) => (OWN.includes(kind) ? kind : "home");
 // Pages that fetch their own data (nothing for the Explorer to load first).
-const SELF_LOADING = ["names", "hero", "changes", "newaccounts", "online", "servers", "hq", "players"];
+const SELF_LOADING = ["names", "hero", "changes", "newaccounts", "online", "servers", "season", "hq", "players"];
 const HeroPage = () => <HeroModelCard />;
 const ExplorerMap = (p) => <MapPage {...p} base="#/x/map" />;
 
@@ -157,6 +159,7 @@ export default function Explorer() {
     : route.kind === "newaccounts" ? "New accounts"
       : route.kind === "online" ? "Server activity"
       : route.kind === "servers" ? "Servers & groups"
+      : route.kind === "season" ? "Season group"
       : route.kind === "hq" ? "HQ levels"
       : route.kind === "players" ? "Players"
     : route.kind === "changes" ? "What changed"
@@ -165,7 +168,7 @@ export default function Explorer() {
   useEffect(() => { if (title) setTitle(title); }, [title]);
 
   const Page = { home: Overview, server: ServerPage, alliance: AlliancePage, player: PlayerPage, compare: Compare,
-    map: ExplorerMap, rankings: Rankings, names: NamesPage, hero: HeroPage, changes: ChangesPage, newaccounts: NewAccountsPage, online: OnlineComparePage, servers: ServersPage, hq: HqLevelsPage, players: PlayersPage }[route.kind];
+    map: ExplorerMap, rankings: Rankings, names: NamesPage, hero: HeroPage, changes: ChangesPage, newaccounts: NewAccountsPage, online: OnlineComparePage, servers: ServersPage, season: SeasonGroupPage, hq: HqLevelsPage, players: PlayersPage }[route.kind];
   const cmpWith = { server: "servers", alliance: "alliances", player: "players" }[route.kind];
   const favKind = { server: "server", alliance: "alliance", player: "player" };
   const section = sectionOf(route.kind);

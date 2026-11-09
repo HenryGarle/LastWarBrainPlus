@@ -912,6 +912,16 @@ app.MapGet("/api/x/players", (string? q, string? servers, string? alliance, stri
     insights.PlayerDirectory(new(q, servers, alliance, country, flag, hqMin, hqMax, heroMin, powerMin, seen, moved, sort ?? "hero", dir != "asc", page ?? 0, size ?? 100)));
 // Season groups (servers.season): the season config each server in lo..hi is on.
 app.MapGet("/api/x/season-groups", (int lo, int hi) => insights.SeasonGroups(lo, hi));
+// One season group's dashboard (servers, seeds, strength, alliance ranking guess, top players).
+app.MapGet("/api/x/season-group/{cfg:long}", (long cfg) => insights.SeasonGroup(cfg));
+// Admin: a season group seen in game before the game reports it - PUT {servers:[..]} replaces the list, [] removes it.
+app.MapPut("/api/season-groups/hand/{cfg:long}", (long cfg, HandSeasonGroup req) =>
+{
+    var servers = req.Servers ?? [];
+    if (servers.Any(s => s <= 0 || s > 99999)) return Results.BadRequest(new { error = "bad server id" });
+    new LastWar.Storage.ServerRegistry(db).SetHandSeasonGroup(cfg, servers);
+    return Results.Ok(new { cfg, servers = servers.Distinct().Order() });
+});
 // Every country / flag / tracked server we know, with player counts (the country drop-downs).
 app.MapGet("/api/x/countries", () => insights.PlayerFacets());
 // Every alliance's hive score on every newest map, and who holds every season city / dig site.
@@ -1008,5 +1018,6 @@ record TrackRequest(string? Servers, string? Level, bool? Visible);
 record ChatRawRequest(string Command, System.Text.Json.JsonElement? Params);
 record InboxSend(string? Text);
 record CalendarRequest(string? Kind, string? Title, DateTime? Start, DateTime? End, string? Servers, string? Detail);
+record HandSeasonGroup(int[]? Servers);
 record SvsSetupRequest(long? Id, string? Name, string? Start, string? Lineup, Dictionary<string, int>? Results);
 record SvsObservationRequest(string? At, string? WeekStart, int A, int B, double[]? ScoresA, double[]? ScoresB, string? Note);

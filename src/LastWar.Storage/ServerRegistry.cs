@@ -56,6 +56,10 @@ public sealed class ServerRegistry(string path)
             -- The season config each server is on, read off the game's refusal to start a character there (servers.season).
             CREATE TABLE IF NOT EXISTS server_season_cfg (
                 server_id BIGINT NOT NULL, cfg_id BIGINT NOT NULL, first_seen TEXT NOT NULL, last_seen TEXT NOT NULL, PRIMARY KEY (server_id, cfg_id));
+            -- Season groups entered by hand (Henry, from the in-game display) before the game reports them.
+            CREATE TABLE IF NOT EXISTS server_season_hand (
+                cfg_id BIGINT NOT NULL, server_id BIGINT NOT NULL, entered_at TEXT NOT NULL, PRIMARY KEY (cfg_id, server_id));
+            ALTER TABLE game_season ADD COLUMN IF NOT EXISTS seeds TEXT NOT NULL DEFAULT '';
             CREATE TABLE IF NOT EXISTS event_server (
                 event TEXT NOT NULL, server_id BIGINT NOT NULL, added_at TEXT NOT NULL, PRIMARY KEY (event, server_id));
             """);
@@ -69,6 +73,23 @@ public sealed class ServerRegistry(string path)
             INSERT INTO server_season_cfg (server_id, cfg_id, first_seen, last_seen) VALUES (@s, @c, @a, @a)
             ON CONFLICT (server_id, cfg_id) DO UPDATE SET last_seen = @a;
             """, ("@s", (long)server), ("@c", cfg), ("@a", Now()));
+
+    /// <summary>Replaces the hand-entered server list for season config <paramref name="cfg"/> (empty list = remove it).</summary>
+    public void SetHandSeasonGroup(long cfg, IReadOnlyCollection<int> servers)
+    {
+        EnsureSchema();
+        using var c = Db.Open(path);
+        using var tx = c.BeginTransaction();
+        using (var del = Db.Command(c, "DELETE FROM server_season_hand WHERE cfg_id = @c;", ("@c", cfg))) { del.Transaction = tx; del.ExecuteNonQuery(); }
+        var at = Now();
+        foreach (var s in servers.Distinct())
+        {
+            using var ins = Db.Command(c, "INSERT INTO server_season_hand (cfg_id, server_id, entered_at) VALUES (@c, @s, @a);", ("@c", cfg), ("@s", (long)s), ("@a", at));
+            ins.Transaction = tx;
+            ins.ExecuteNonQuery();
+        }
+        tx.Commit();
+    }
 
     // ---- game tables
 
@@ -102,16 +123,34 @@ public sealed class ServerRegistry(string path)
             """, Read("yuntie_battle_server_group_new.json"), r =>
             [("@id", L(r, "id")), ("@s", L(r, "season")), ("@o", S(r, "open_time")), ("@e", S(r, "close_time")), ("@g", S(r, "group_list")),
              ("@m", L(r, "match_type")), ("@set", L(r, "setting_group_id")), ("@raw", r.GetRawText())]);
-        // ponytail: lw_season rows are huge; the dates are what we use, so raw stays empty.
+        // ponytail: lw_season rows are huge; the dates and the two seeded servers are what we use, so raw stays empty.
         var seasons = Up("""
-            INSERT INTO game_season (id, season, name, pre_start, start_time, settlement, end_time, zone_war_season_group, raw)
-            VALUES (@id, @s, @n, @p, @st, @se, @e, @z, '')
-            ON CONFLICT (id) DO UPDATE SET season = @s, name = @n, pre_start = @p, start_time = @st, settlement = @se, end_time = @e, zone_war_season_group = @z;
+            INSERT INTO game_season (id, season, name, pre_start, start_time, settlement, end_time, zone_war_season_group, raw, seeds)
+            VALUES (@id, @s, @n, @p, @st, @se, @e, @z, '', @seeds)
+            ON CONFLICT (id) DO UPDATE SET season = @s, name = @n, pre_start = @p, start_time = @st, settlement = @se, end_time = @e, zone_war_season_group = @z, seeds = @seeds;
             """, Read("lw_season.json"), r =>
             [("@id", L(r, "id")), ("@s", L(r, "season")), ("@n", S(r, "name")), ("@p", S(r, "pre_start_time")), ("@st", S(r, "start_time")),
-             ("@se", S(r, "settlement_time")), ("@e", S(r, "end_time")), ("@z", S(r, "zone_war_season_group"))]);
+             ("@se", S(r, "settlement_time")), ("@e", S(r, "end_time")), ("@z", S(r, "zone_war_season_group")), ("@seeds", Seeds(S(r, "camp_sever_local")))]);
         tx.Commit();
         return (wars, groups, seasons);
+    }
+
+    /// <summary>
+    /// lw_season.camp_sever_local "lw:&lt;9 hex bytes&gt;" -> "1974,1958": two servers of the season group (the seeds),
+    /// each byte XOR a fixed per-position key (docs/season-groups.md). Anything else (other code formats) -> "".
+    /// </summary>
+    public static string Seeds(string code)
+    {
+        ReadOnlySpan<byte> key = [0x0e, 0x2a, 0x0d, 0x28, 0x38, 0x03, 0x23, 0x02, 0x0e];
+        if (!code.StartsWith("lw:") || code.Length != 3 + 18) return "";
+        Span<char> s = stackalloc char[9];
+        for (var i = 0; i < 9; i++)
+        {
+            if (!byte.TryParse(code.AsSpan(3 + i * 2, 2), System.Globalization.NumberStyles.HexNumber, null, out var b)) return "";
+            s[i] = (char)(b ^ key[i]);
+        }
+        var t = new string(s);
+        return System.Text.RegularExpressions.Regex.IsMatch(t, @"^\d{4}\|\d{4}$") ? t.Replace('|', ',') : "";
     }
 
     /// <summary>"1957;1958|1959-1962" -> sides of server ids.</summary>

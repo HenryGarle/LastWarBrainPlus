@@ -23,7 +23,8 @@ Read in this order:
 - Season 3 for our block (1957-2020) starts 2026-11-23. Servers still report their S2 config (1319-1326) and flip to
   the S3 config (1497-1504) at season START, not pre-season. The daily `season-groups` job will read the full S3 groups
   once they flip - on/after the 23rd, check Explore > Servers > Season groups, or `/api/x/season-groups?lo=1957&hi=2020`.
-  Until then only 2 servers per S3 group are known (decode) plus Henry's full 1497/1498 lists - see season-groups.md.
+  The game re-drew S3 in table 40210 (2026-11-09); 1500 = 1962, 1963, 1965, 1967, 1969, 1975, 1976, 1984 from Henry's
+  in-game display, entered by hand (server_season_hand). Other groups: 2 servers each from the decode - see season-groups.md.
 - Everything built this run is deployed (hosted `live:` tags in deploy.log). Recent work: idle_seen activity fix,
   service-account pacing after the lw_2 ban, Explore > Players (country flags, tracked-servers default), secret-task
   reward checks (guest-only), season-groups read + page + job. All in AGENTS.md's dated log and the topic notes here.
