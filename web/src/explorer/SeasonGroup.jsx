@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useJson } from "./PlayerTabs.jsx";
 import { big, int, ago } from "./format.js";
 import { PlayerLink, ServerLink, Tag } from "./bits.jsx";
@@ -6,7 +6,6 @@ import { useHashParam } from "../nav.js";
 
 // #/x/season[/<cfg>][?focus=<server>&favs=1&top=N]  One season group: its servers side by side, seeds, alliance ranking guess,
 // top players. Anonymous by default: no server is singled out and favourite marks are hidden unless asked for.
-const HOME = 1967;   // only picks which group opens when none is named - never shown
 
 // Server measures, best first. get(r) reads one Overview row (+ depth counts) from /api/x/season-group.
 const MEASURES = [
@@ -28,33 +27,34 @@ const MEASURES = [
 const isCount = (k) => ["hero100", "hero80", "hero60", "hq30", "active", "eventRegulars80"].includes(k);
 const fmt = (k, v) => (v == null ? "–" : isCount(k) ? int(v) : big(v));
 
-/** Explore -> Season group. With no cfg in the route, opens the newest group holding our server. */
+/** Explore -> Season group. Nothing loads until a group is picked (the group data is heavy). */
 export function SeasonGroupPage({ route }) {
-  const groups = useJson(route.id ? null : "/api/x/season-groups?lo=1957&hi=2020");
-  useEffect(() => {
-    if (route.id || !Array.isArray(groups)) return;
-    const mine = groups.filter((g) => g.server === HOME).map((g) => g.cfg);
-    if (mine.length) window.location.replace(`#/x/season/${Math.max(...mine)}`);
-  }, [route.id, groups]);
-  if (!route.id) return <p className="muted">{groups && !Array.isArray(groups) ? "Could not load season groups." : "Finding our season group…"}</p>;
-  return <SeasonGroup cfg={route.id} />;
+  if (route.id) return <SeasonGroup cfg={route.id} />;
+  return (
+    <div className="card">
+      <h2>Season group</h2>
+      <p><GroupPicker cfg="" /></p>
+      <p className="small muted">Pick a season group to compare its servers, alliances and players.</p>
+    </div>
+  );
 }
 
 /** Every season group we know in our block (from the game or entered by hand), newest config first. */
 function GroupPicker({ cfg }) {
   const g = useJson("/api/x/season-groups?lo=1957&hi=2020");
-  const cfgs = Array.isArray(g) ? [...new Map(g.map((r) => [r.cfg, r])).values()].sort((a, b) => b.cfg - a.cfg) : [];
-  if (cfgs.length < 2) return null;
-  const go = (c) => { const q = window.location.hash.split("?")[1]; window.location.hash = `#/x/season/${c}${q ? `?${q}` : ""}`; };
+  if (g && !Array.isArray(g)) return <span className="err">Could not load season groups.</span>;
+  if (!g) return <span className="muted">Loading groups…</span>;
+  const cfgs = [...new Map(g.map((r) => [r.cfg, r])).values()].sort((a, b) => b.cfg - a.cfg);
+  const go = (c) => { if (!c) return; const q = window.location.hash.split("?")[1]; window.location.hash = `#/x/season/${c}${q ? `?${q}` : ""}`; };
   return (
     <label>Group{" "}
       <select value={cfg} onChange={(e) => go(e.target.value)}>
+        {!cfg && <option value="">pick a group</option>}
         {cfgs.map((r) => <option key={r.cfg} value={r.cfg}>{r.season ? `S${r.season} ` : ""}{r.cfg}</option>)}
       </select>
     </label>
   );
 }
-
 function SeasonGroup({ cfg }) {
   const [topQ, setTop] = useHashParam("top", "0");
   const [favsQ, setFavs] = useHashParam("favs", "0");
