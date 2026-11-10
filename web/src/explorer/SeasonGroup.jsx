@@ -40,6 +40,21 @@ export function SeasonGroupPage({ route }) {
   return <SeasonGroup cfg={route.id} />;
 }
 
+/** Every season group we know in our block (from the game or entered by hand), newest config first. */
+function GroupPicker({ cfg }) {
+  const g = useJson("/api/x/season-groups?lo=1957&hi=2020");
+  const cfgs = Array.isArray(g) ? [...new Map(g.map((r) => [r.cfg, r])).values()].sort((a, b) => b.cfg - a.cfg) : [];
+  if (cfgs.length < 2) return null;
+  const go = (c) => { const q = window.location.hash.split("?")[1]; window.location.hash = `#/x/season/${c}${q ? `?${q}` : ""}`; };
+  return (
+    <label>Group{" "}
+      <select value={cfg} onChange={(e) => go(e.target.value)}>
+        {cfgs.map((r) => <option key={r.cfg} value={r.cfg}>{r.season ? `S${r.season} ` : ""}{r.cfg}</option>)}
+      </select>
+    </label>
+  );
+}
+
 function SeasonGroup({ cfg }) {
   const [topQ, setTop] = useHashParam("top", "0");
   const [favsQ, setFavs] = useHashParam("favs", "0");
@@ -70,6 +85,7 @@ function SeasonGroup({ cfg }) {
       <div className="card">
         <h2>Season {d.season?.season ?? "?"} group {cfg}</h2>
         <div style={{ display: "flex", gap: 16, flexWrap: "wrap", alignItems: "center", marginBottom: 8 }}>
+          <GroupPicker cfg={cfg} />
           <label>Count players from{" "}
             <select value={top} onChange={(e) => setTop(e.target.value)}>
               <option value={0}>everyone on the server</option>
